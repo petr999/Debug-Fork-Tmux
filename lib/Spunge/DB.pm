@@ -30,6 +30,12 @@ __END__
 
 =head1 SYNOPSIS
 
+As a helper for the debugger, the module should be used this way:
+
+    perl -MSpunge::DB -d your_script.pl
+
+You should run it from inside the C<tmux> window manager.
+
 =head1 DESCRIPTION
 
 =head1 SUBROUTINES/METHODS

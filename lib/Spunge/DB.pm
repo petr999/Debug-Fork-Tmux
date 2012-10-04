@@ -1,4 +1,4 @@
-# ABSTRACT: (Description goes here)
+# ABSTRACT: Sub(s) to allow debugging perl code with fork()s and a tmux
 package Spunge::DB;
 
 # VERSION

@@ -363,6 +363,12 @@ is available in core C<Perl> distribution since version 5
 * L<Module::Build>
 is available in core C<Perl> distribution since version 5.9.4
 
+* L<File::Spec>
+is available in core C<Perl> distribution since version 5.4.5
+
+* L<Cwd>
+is available in core C<Perl> distribution since version 5
+
 =head1 CONFIGURATION AND ENVIRONMENT
 
 The module requires the L<Tmux|http://tmux.sf.net> window manager for the

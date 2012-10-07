@@ -183,8 +183,6 @@ __END__
 
 =pod
 
-=head1 NAME
-
 =head1 SYNOPSIS
 
 As a helper for the debugger, the module should be used this way:
@@ -196,7 +194,7 @@ You should run it from inside the C<tmux> window manager.
 =head1 DESCRIPTION
 
 The Perl's standard debugger requires additional stuff when the debugged
-Perl program use the L<fork()> built-in.
+Perl program use the L<fork()|perlfunc/fork> built-in.
 
 This module is about to solve the trouble which visible like this:
 
@@ -232,21 +230,23 @@ windows manager for such a task.
 
 =const C<$TMUX_PATH>
 
-Path to the C<tmux> binary.
+C<Str> path to the C<tmux> binary.
 
 =const C<$TMUX_BIN>
 
-The C<tmux> binary fully qualified file name.
+C<Str> the C<tmux> binary fully qualified file name.
 
 =const C<@TMUX_CMD_NEWW>
 
-The L<system> arguments for a C<tmux> command for opening a new window and
-with output of a window address in C<tmux>.
+C<Array[Str]> the L<system()|perlfunc/system> arguments for a C<tmux>
+command for opening a new window and with output of a window address in
+C<tmux>.
 
 =const C<@TMUX_CMD_TTY>
 
-The L<system> arguments for a  C<tmux> command for finding a C<tty> name in
-the output.  Expects C<tmux>'s window address as the very last argument.
+C<Array[Str]> the L<system()|perlfunc/system> arguments for a  C<tmux>
+command for finding a C<tty> name in the output.  Expects C<tmux>'s window
+address as the very last argument.
 
 =head1 SUBROUTINES/METHODS
 
@@ -259,32 +259,109 @@ Finds new C<TTY> for the C<fork()>ed process.
 Takes no arguments. Returns C<Str> name of the C<tty> device of the <tmux>'s
 new window created for the debugger's new process.
 
-Sets the $DB::fork_TTY to the same <Str> value.
+Sets the C<$DB::fork_TTY> to the same C<Str> value.
 
-=sub C<spawn_tty>
+=sub C<spawn_tty()>
 
-Creates a C<TTY> device and returns Str its name.
+Creates a C<TTY> device and returns C<Str> its name.
 
 =sub C<tmux_new_window()>
 
-Creates a C<tmux> window and returns Str its id/number.
+Creates a given C<tmux> window and returns C<Str> its id/number.
 
-=sub C<tmux_window_tty()>
+=sub C<tmux_window_tty( $window_id )>
 
-Checks for a C<tmux> window's tty name and returns its Str name.
+Checks for a given C<tmux> window's tty name and returns its C<Str> name.
 
-=sub C<read_from_cmd>
+=sub C<read_from_cmd( $cmd =E<gt> @args )>
 
-Takes the list containing the L<system> command and its arguments and
-executes it. Reads Str the output and returns it. Throws if no output or if
-the command failed.
+Takes the list containing the C<Str> L<system()|perlfunc/system> command and
+C<Array> its arguments and executes it. Reads Str the output and returns it.
+Throws if no output or if the command failed.
 
-=sub C<croak_on_cmd>
+=sub C<croak_on_cmd( $cmd =E<gt> @args, $happen )>
 
-Takes the command and the reason of its failure, examines the $? and dies
-with explanation on the L<system> command failure.
+Takes the C<Str> command, C<Array> its arguments and C<Str> the reason of
+its failure, examines the C<$?> and dies with explanation on the
+L<system()|perlfunc/system> command failure.
 
 =head1 DIAGNOSTICS
+
+=over
+
+=item The command ...
+
+Typically the error message starts with the command the L<Spunge::DB> tried
+to execute, including the command's arguments.
+
+=item failed opening command: ...
+
+The command was not taken by the system as an executable binary file.
+
+=item ... didn't write a line
+
+=item failed reading command: ...
+
+Command did not output exactly one line of the text.
+
+=item ... did not finish
+
+Command outputs more than one line of the text.
+
+=item provided empty string
+
+Command outputs exactly one line of the text and the line is empty.
+
+=item failed to execute: ...
+
+There was failure executing the command
+
+=item child died with(out) signal X, Y coredump
+
+Command was killed by the signal X and the coredump is (not) located in Y.
+
+=item child exited with value X
+
+Command was not failed but there are reasons to throw an error like the
+wrong command's output.
+
+=back
+
+
+=head1 DEPENDENCIES
+
+* L<Config>
+is available in core C<Perl> distribution since version 5.3.7
+
+* L<Module::Build>
+is available in core C<Perl> distribution since version 5.9.4
+
+* L<Scalar::Util>
+is available in core C<Perl> distribution since version 5.7.3
+
+* L<Sort::Versions>
+is available from C<CPAN>
+
+* L<Test::Exception>
+is available from C<CPAN>
+
+* L<Test::More>
+is available in core C<Perl> distribution since version 5.6.2
+
+* L<Test::Most>
+is available from C<CPAN>
+
+* L<Test::Strict>
+is available from C<CPAN>
+
+* L<autodie>
+is available in core C<Perl> distribution since version 5.10.1
+
+* L<ExtUtils::MakeMaker>
+is available in core C<Perl> distribution since version 5
+
+* L<Module::Build>
+is available in core C<Perl> distribution since version 5.9.4
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
@@ -292,6 +369,6 @@ The module requires the L<Tmux|http://tmux.sf.net> window manager for the
 console to be present in the system.
 
 For some while, the configuration is made via the package lexical
-constants.
+L<constants|/CONSTANTS>.
 
 =cut

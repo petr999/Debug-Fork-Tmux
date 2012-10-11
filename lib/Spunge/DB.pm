@@ -1,4 +1,4 @@
-# ABSTRACT: Sub(s) to allow debugging perl code with fork()s and a tmux
+# ABSTRACT: Makes fork() in debugger to open a new Tmux window
 package Spunge::DB;
 
 # VERSION
@@ -362,6 +362,15 @@ is available in core C<Perl> distribution since version 5
 
 * L<Module::Build>
 is available in core C<Perl> distribution since version 5.9.4
+
+* L<File::Spec>
+is available in core C<Perl> distribution since version 5.4.5
+
+* L<Cwd>
+is available in core C<Perl> distribution since version 5
+
+* L<Const::Fast>
+is available from C<CPAN>
 
 =head1 CONFIGURATION AND ENVIRONMENT
 

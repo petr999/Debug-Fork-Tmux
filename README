@@ -1,0 +1,230 @@
+NAME
+    Spunge::DB - Makes fork() in debugger to open a new Tmux window
+
+VERSION
+    This documentation refers to the module contained in the distribution
+    Spunge-DB version 0.0.5.
+
+SYNOPSIS
+    As a helper for the debugger, the module should be used this way:
+
+        perl -MSpunge::DB -d your_script.pl
+
+    You should run it from inside the "tmux" window manager.
+
+DESCRIPTION
+    The Perl's standard debugger requires additional stuff when the debugged
+    Perl program use the fork() built-in.
+
+    This module is about to solve the trouble which visible like this:
+
+      ######### Forked, but do not know how to create a new TTY. #########
+      Since two debuggers fight for the same TTY, input is severely entangled.
+
+      I know how to switch the output to a different window in xterms, OS/2
+      consoles, and Mac OS X Terminal.app only.  For a manual switch, put the
+      name of the created TTY in $DB::fork_TTY, or define a function
+      DB::get_fork_TTY() returning this.
+
+      On UNIX-like systems one can get the name of a TTY for the given window
+      by typing tty, and disconnect the shell from TTY by sleep 1000000.
+
+    "OS/2" is a fun for me but in the past. "Mac OS X" is a more chance but
+    still isn't real. And for "xterm" ... who wants to keep it on your
+    server? Gimme some stones to throw on that one.
+
+    But the pseudo-terminal device isn't much about "GUI"s by its nature so
+    the problem behind the bars of the perl5db.pl report ( see more detailed
+    problem description at the PerlMonks thread
+    <http://perlmonks.org/?node_id=128283> ) is the consoles management.
+    It's a kind of a tricky, for example, to start the next "ssh" session
+    initiated from the machine serving as an "sshd" server for the existing
+    session.
+
+    Thus we kind of have to give a chance to the consoles management with a
+    software capable to run on a server machine without as much dependencies
+    as an "xterm". This module is a try to pick the Tmux
+    <http://tmux.sf.net> windows manager for such a task.
+
+CONSTANTS
+  $TMUX_PATH
+    "Str" path to the "tmux" binary.
+
+  $TMUX_BIN
+    "Str" the "tmux" binary fully qualified file name.
+
+  @TMUX_CMD_NEWW
+    "Array[Str]" the system() arguments for a "tmux" command for opening a
+    new window and with output of a window address in "tmux".
+
+  @TMUX_CMD_TTY
+    "Array[Str]" the system() arguments for a "tmux" command for finding a
+    "tty" name in the output. Expects "tmux"'s window address as the very
+    last argument.
+
+SUBROUTINES/METHODS
+    All of the following are functions:
+
+  PUBLIC
+   "DB::get_fork_TTY()"
+    Finds new "TTY" for the "fork()"ed process.
+
+    Takes no arguments. Returns "Str" name of the "tty" device of the
+    <tmux>'s new window created for the debugger's new process.
+
+    Sets the $DB::fork_TTY to the same "Str" value.
+
+  PRIVATE
+   "spawn_tty()"
+    Creates a "TTY" device and returns "Str" its name.
+
+   "tmux_new_window()"
+    Creates a given "tmux" window and returns "Str" its id/number.
+
+   "tmux_window_tty( $window_id )"
+    Checks for a given "tmux" window's tty name and returns its "Str" name.
+
+   "read_from_cmd( $cmd => @args )"
+    Takes the list containing the "Str" system() command and "Array" its
+    arguments and executes it. Reads Str the output and returns it. Throws
+    if no output or if the command failed.
+
+   "croak_on_cmd( $cmd => @args, $happen )"
+    Takes the "Str" command, "Array" its arguments and "Str" the reason of
+    its failure, examines the $? and dies with explanation on the system()
+    command failure.
+
+CONFIGURATION AND ENVIRONMENT
+    The module requires the Tmux <http://tmux.sf.net> window manager for the
+    console to be present in the system.
+
+    For some while, the configuration is made via the package lexical
+    constants.
+
+DIAGNOSTICS
+    The command ...
+        Typically the error message starts with the command the Spunge::DB
+        tried to execute, including the command's arguments.
+
+    failed opening command: ...
+        The command was not taken by the system as an executable binary
+        file.
+
+    ... didn't write a line
+    failed reading command: ...
+        Command did not output exactly one line of the text.
+
+    ... did not finish
+        Command outputs more than one line of the text.
+
+    provided empty string
+        Command outputs exactly one line of the text and the line is empty.
+
+    failed to execute: ...
+        There was failure executing the command
+
+    child died with(out) signal X, Y coredump
+        Command was killed by the signal X and the coredump is (not) located
+        in Y.
+
+    child exited with value X
+        Command was not failed but there are reasons to throw an error like
+        the wrong command's output.
+
+DEPENDENCIES
+    * Config is available in core "Perl" distribution since version 5.3.7
+
+    * Module::Build is available in core "Perl" distribution since version
+    5.9.4
+
+    * Scalar::Util is available in core "Perl" distribution since version
+    5.7.3
+
+    * Sort::Versions is available from "CPAN"
+
+    * Test::Exception is available from "CPAN"
+
+    * Test::More is available in core "Perl" distribution since version
+    5.6.2
+
+    * Test::Most is available from "CPAN"
+
+    * Test::Strict is available from "CPAN"
+
+    * autodie is available in core "Perl" distribution since version 5.10.1
+
+    * ExtUtils::MakeMaker is available in core "Perl" distribution since
+    version 5
+
+    * Module::Build is available in core "Perl" distribution since version
+    5.9.4
+
+    * File::Spec is available in core "Perl" distribution since version
+    5.4.5
+
+    * Cwd is available in core "Perl" distribution since version 5
+
+    * Const::Fast is available from "CPAN"
+
+BUGS AND LIMITATIONS
+    You can make new bug reports, and view existing ones, through the web
+    interface at <http://bugs.vereshagin.org/product/Spunge-DB>.
+
+SUPPORT
+  Perldoc
+    You can find documentation for this module with the perldoc command.
+
+      perldoc Spunge::DB
+
+  Email
+    You can email the author of this module at "peter@vereshagin.org" asking
+    for help with any problems you have.
+
+  Bugs / Feature Requests
+    Please report any bugs or feature requests by email to
+    "peter@vereshagin.org", or through the web interface at
+    <http://bugs.vereshagin.org/product/Spunge-DB>. You will be
+    automatically notified of any progress on the request by the system.
+
+  Source Code
+    The code is open to the world, and available for you to hack on. Please
+    feel free to browse it and play with it, or whatever. If you want to
+    contribute patches, please send me a diff or prod me to pull from your
+    repository :)
+
+    <http://gitweb.vereshagin.org/Spunge-DB>
+
+      git clone https://github.com/petr999/Spunge-DB.git
+
+AUTHOR
+    Peter Vereshagin <http://vereshagin.org> <peter@vereshagin.org>
+
+COPYRIGHT AND LICENSE
+    This software is Copyright (c) 2012 by Peter Vereshagin.
+
+    This is free software, licensed under:
+
+      The (three-clause) BSD License
+
+DISCLAIMER OF WARRANTY
+    BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+    FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
+    OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+    PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+    EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
+    ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH
+    YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL
+    NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+    IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+    WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+    REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE LIABLE
+    TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR
+    CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
+    SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+    RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+    FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+    SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+    DAMAGES.
+

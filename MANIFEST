@@ -1,4 +1,5 @@
 Build.PL
+Changes
 INSTALL
 LICENSE
 MANIFEST
@@ -12,5 +13,4 @@ t/000-report-versions.t
 t/10-use.t
 t/20-cmd.t
 t/30-tmux.t
-t/release-changes_has_content.t
 t/release-portability.t

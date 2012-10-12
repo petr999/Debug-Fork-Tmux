@@ -1,0 +1,67 @@
+{
+   "abstract" : "Makes fork() in debugger to open a new Tmux window",
+   "author" : [
+      "L<Peter Vereshagin|http://vereshagin.org> <peter@vereshagin.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.300025, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "bsd"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Spunge-DB",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Module::Build" : "0.3601"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.30",
+            "Module::Build" : "0.3601"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Carp" : "0",
+            "Const::Fast" : "0",
+            "Cwd" : "0",
+            "File::Spec" : "0",
+            "perl" : "5.006",
+            "strict" : "0",
+            "warnings" : "0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Config" : "0",
+            "Scalar::Util" : "0",
+            "Sort::Versions" : "0",
+            "Test::Exception" : "0",
+            "Test::More" : "0.94",
+            "Test::Most" : "0",
+            "Test::Strict" : "0",
+            "autodie" : "0",
+            "perl" : "5.004"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "mailto" : "peter@vereshagin.org",
+         "web" : "http://bugs.vereshagin.org/product/Spunge-DB"
+      },
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/petr999/Spunge-DB.git",
+         "web" : "http://gitweb.vereshagin.org/Spunge-DB"
+      }
+   },
+   "version" : "0.0.7"
+}
+

@@ -6,7 +6,7 @@ Spunge::DB - Makes fork() in debugger to open a new Tmux window
 
 =head1 VERSION
 
-This documentation refers to the module contained in the distribution L<Spunge-DB> version 0.0.6.
+This documentation refers to the module contained in the distribution L<Spunge-DB> version 0.0.7.
 
 =head1 SYNOPSIS
 

@@ -1,0 +1,280 @@
+=pod
+
+=head1 NAME
+
+Spunge::DB - Makes fork() in debugger to open a new Tmux window
+
+=head1 VERSION
+
+This documentation refers to the module contained in the distribution L<Spunge-DB> version 0.0.4.
+
+=head1 SYNOPSIS
+
+As a helper for the debugger, the module should be used this way:
+
+    perl -MSpunge::DB -d your_script.pl
+
+You should run it from inside the C<tmux> window manager.
+
+=head1 DESCRIPTION
+
+The Perl's standard debugger requires additional stuff when the debugged
+Perl program use the L<fork()|perlfunc/fork> built-in.
+
+This module is about to solve the trouble which visible like this:
+
+  ######### Forked, but do not know how to create a new TTY. #########
+  Since two debuggers fight for the same TTY, input is severely entangled.
+
+  I know how to switch the output to a different window in xterms, OS/2
+  consoles, and Mac OS X Terminal.app only.  For a manual switch, put the
+  name of the created TTY in $DB::fork_TTY, or define a function
+  DB::get_fork_TTY() returning this.
+
+  On UNIX-like systems one can get the name of a TTY for the given window
+  by typing tty, and disconnect the shell from TTY by sleep 1000000.
+
+C<OS/2> is a fun for me but in the past. C<Mac OS X> is a more chance but
+still isn't real. And for C<xterm> ... who wants to keep it on your server?
+Gimme some stones to throw on that one.
+
+But the pseudo-terminal device isn't much about C<GUI>s by its nature so the
+problem behind the bars of the L<perl5db.pl> report ( see more detailed
+problem description at the L<PerlMonks
+thread|http://perlmonks.org/?node_id=128283> ) is the consoles management.
+It's a kind of a tricky, for example, to start the next C<ssh> session
+initiated from the machine serving as an C<sshd> server for the existing
+session.
+
+Thus we kind of have to give a chance to the consoles management with
+a software capable to run on a server machine without as much dependencies
+as an C<xterm>. This module is a try to pick the L<Tmux|http://tmux.sf.net>
+windows manager for such a task.
+
+=head1 CONSTANTS
+
+=head2 C<$TMUX_PATH>
+
+C<Str> path to the C<tmux> binary.
+
+=head2 C<$TMUX_BIN>
+
+C<Str> the C<tmux> binary fully qualified file name.
+
+=head2 C<@TMUX_CMD_NEWW>
+
+C<Array[Str]> the L<system()|perlfunc/system> arguments for a C<tmux>
+command for opening a new window and with output of a window address in
+C<tmux>.
+
+=head2 C<@TMUX_CMD_TTY>
+
+C<Array[Str]> the L<system()|perlfunc/system> arguments for a  C<tmux>
+command for finding a C<tty> name in the output.  Expects C<tmux>'s window
+address as the very last argument.
+
+=head1 SUBROUTINES/METHODS
+
+All of the following are functions:
+
+=head2 PUBLIC
+
+=head3 C<DB::get_fork_TTY()>
+
+Finds new C<TTY> for the C<fork()>ed process.
+
+Takes no arguments. Returns C<Str> name of the C<tty> device of the <tmux>'s
+new window created for the debugger's new process.
+
+Sets the C<$DB::fork_TTY> to the same C<Str> value.
+
+=head2 PRIVATE
+
+=head3 C<spawn_tty()>
+
+Creates a C<TTY> device and returns C<Str> its name.
+
+=head3 C<tmux_new_window()>
+
+Creates a given C<tmux> window and returns C<Str> its id/number.
+
+=head3 C<tmux_window_tty( $window_id )>
+
+Checks for a given C<tmux> window's tty name and returns its C<Str> name.
+
+=head3 C<read_from_cmd( $cmd =E<gt> @args )>
+
+Takes the list containing the C<Str> L<system()|perlfunc/system> command and
+C<Array> its arguments and executes it. Reads Str the output and returns it.
+Throws if no output or if the command failed.
+
+=head3 C<croak_on_cmd( $cmd =E<gt> @args, $happen )>
+
+Takes the C<Str> command, C<Array> its arguments and C<Str> the reason of
+its failure, examines the C<$?> and dies with explanation on the
+L<system()|perlfunc/system> command failure.
+
+=head1 CONFIGURATION AND ENVIRONMENT
+
+The module requires the L<Tmux|http://tmux.sf.net> window manager for the
+console to be present in the system.
+
+For some while, the configuration is made via the package lexical
+L<constants|/CONSTANTS>.
+
+=head1 DIAGNOSTICS
+
+=over
+
+=item The command ...
+
+Typically the error message starts with the command the L<Spunge::DB> tried
+to execute, including the command's arguments.
+
+=item failed opening command: ...
+
+The command was not taken by the system as an executable binary file.
+
+=item ... didn't write a line
+
+=item failed reading command: ...
+
+Command did not output exactly one line of the text.
+
+=item ... did not finish
+
+Command outputs more than one line of the text.
+
+=item provided empty string
+
+Command outputs exactly one line of the text and the line is empty.
+
+=item failed to execute: ...
+
+There was failure executing the command
+
+=item child died with(out) signal X, Y coredump
+
+Command was killed by the signal X and the coredump is (not) located in Y.
+
+=item child exited with value X
+
+Command was not failed but there are reasons to throw an error like the
+wrong command's output.
+
+=back
+
+=head1 DEPENDENCIES
+
+* L<Config>
+is available in core C<Perl> distribution since version 5.3.7
+
+* L<Module::Build>
+is available in core C<Perl> distribution since version 5.9.4
+
+* L<Scalar::Util>
+is available in core C<Perl> distribution since version 5.7.3
+
+* L<Sort::Versions>
+is available from C<CPAN>
+
+* L<Test::Exception>
+is available from C<CPAN>
+
+* L<Test::More>
+is available in core C<Perl> distribution since version 5.6.2
+
+* L<Test::Most>
+is available from C<CPAN>
+
+* L<Test::Strict>
+is available from C<CPAN>
+
+* L<autodie>
+is available in core C<Perl> distribution since version 5.10.1
+
+* L<ExtUtils::MakeMaker>
+is available in core C<Perl> distribution since version 5
+
+* L<Module::Build>
+is available in core C<Perl> distribution since version 5.9.4
+
+* L<File::Spec>
+is available in core C<Perl> distribution since version 5.4.5
+
+* L<Cwd>
+is available in core C<Perl> distribution since version 5
+
+* L<Const::Fast>
+is available from C<CPAN>
+
+=head1 BUGS AND LIMITATIONS
+
+You can make new bug reports, and view existing ones, through the
+web interface at L<http://bugs.vereshagin.org/product/Spunge-DB>.
+
+=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
+
+=head1 SUPPORT
+
+=head2 Perldoc
+
+You can find documentation for this module with the perldoc command.
+
+  perldoc Spunge::DB
+
+=head2 Email
+
+You can email the author of this module at C<peter@vereshagin.org> asking for help with any problems you have.
+
+=head2 Bugs / Feature Requests
+
+Please report any bugs or feature requests by email to C<peter@vereshagin.org>, or through
+the web interface at L<http://bugs.vereshagin.org/product/Spunge-DB>. You will be automatically notified of any
+progress on the request by the system.
+
+=head2 Source Code
+
+The code is open to the world, and available for you to hack on. Please feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
+from your repository :)
+
+L<http://gitweb.vereshagin.org/Spunge-DB>
+
+  git clone https://github.com/petr999/Spunge-DB.git
+
+=head1 AUTHOR
+
+L<Peter Vereshagin|http://vereshagin.org> <peter@vereshagin.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2012 by Peter Vereshagin.
+
+This is free software, licensed under:
+
+  The (three-clause) BSD License
+
+=head1 DISCLAIMER OF WARRANTY
+
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT
+WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER
+PARTIES PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND,
+EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE
+SOFTWARE IS WITH YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME
+THE COST OF ALL NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE LIABLE
+TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR
+CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
+SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGES.
+

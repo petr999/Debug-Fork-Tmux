@@ -3,7 +3,7 @@ NAME
 
 VERSION
     This documentation refers to the module contained in the distribution
-    Spunge-DB version 0.0.5.
+    Spunge-DB version 0.0.6.
 
 SYNOPSIS
     As a helper for the debugger, the module should be used this way:

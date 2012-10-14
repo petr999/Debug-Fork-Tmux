@@ -4,7 +4,8 @@ Spunge::DB - Makes fork() in debugger to open a new Tmux window
 
 # VERSION
 
-This documentation refers to the module contained in the distribution [Spunge-DB](http://search.cpan.org/perldoc?Spunge-DB) version 0.0.10.
+This documentation refers to the module contained in the distribution
+[Spunge-DB](http://search.cpan.org/perldoc?Spunge-DB) version 0.0.11.
 
 # SYNOPSIS
 
@@ -158,8 +159,15 @@ wrong command's output.
 
 # DEPENDENCIES
 
-\* [Config](http://search.cpan.org/perldoc?Config)
-is available in core `Perl` distribution since version 5.3.7
+\* `Perl 5.6.0+`
+is available from [The Perl website](http://www.perl.org)
+
+\* [Config](http://search.cpan.org/perldoc?Config), [Cwd](http://search.cpan.org/perldoc?Cwd), [DB](http://search.cpan.org/perldoc?DB), [ExtUtils::MakeMaker](http://search.cpan.org/perldoc?ExtUtils::MakeMaker), [File::Find](http://search.cpan.org/perldoc?File::Find),
+[File::Spec](http://search.cpan.org/perldoc?File::Spec) are available in core `Perl` distribution version 5.6.0 and
+later
+
+\* [Const::Fast](http://search.cpan.org/perldoc?Const::Fast)
+is available from `CPAN`
 
 \* [Module::Build](http://search.cpan.org/perldoc?Module::Build)
 is available in core `Perl` distribution since version 5.9.4
@@ -185,25 +193,22 @@ is available from `CPAN`
 \* [autodie](http://search.cpan.org/perldoc?autodie)
 is available in core `Perl` distribution since version 5.10.1
 
-\* [ExtUtils::MakeMaker](http://search.cpan.org/perldoc?ExtUtils::MakeMaker)
-is available in core `Perl` distribution since version 5
+\* `Tmux`
+is available from [The Tmux website](http://tmux.sourceforge.net)
 
-\* [Module::Build](http://search.cpan.org/perldoc?Module::Build)
-is available in core `Perl` distribution since version 5.9.4
-
-\* [File::Spec](http://search.cpan.org/perldoc?File::Spec)
-is available in core `Perl` distribution since version 5.4.5
-
-\* [Cwd](http://search.cpan.org/perldoc?Cwd)
-is available in core `Perl` distribution since version 5
-
-\* [Const::Fast](http://search.cpan.org/perldoc?Const::Fast)
-is available from `CPAN`
+Most of them can easily be found in your operating system
+distribution/repository.
 
 # BUGS AND LIMITATIONS
 
 You can make new bug reports, and view existing ones, through the
 web interface at [http://bugs.vereshagin.org/product/Spunge-DB](http://bugs.vereshagin.org/product/Spunge-DB).
+
+# WEB SITE
+
+The web site of
+[Spunge::DB](http://gitweb.vereshagin.org/Spunge-DB/README.html) currently
+consists of only one page cause it's a very small module.
 
 # SUPPORT
 
@@ -215,18 +220,23 @@ You can find documentation for this module with the perldoc command.
 
 ## Email
 
-You can email the author of this module at `peter@vereshagin.org` asking for help with any problems you have.
+You can email the author of this module at `peter@vereshagin.org` asking
+for help with any problems you have.
 
 ## Bugs / Feature Requests
 
-Please report any bugs or feature requests by email to `peter@vereshagin.org`, or through
-the web interface at [http://bugs.vereshagin.org/product/Spunge-DB](http://bugs.vereshagin.org/product/Spunge-DB). You will be automatically notified of any
+Please report any bugs or feature requests by email to
+`peter@vereshagin.org`, or through
+the web interface at [http://bugs.vereshagin.org/product/Spunge-DB](http://bugs.vereshagin.org/product/Spunge-DB). You
+will be automatically notified of any
 progress on the request by the system.
 
 ## Source Code
 
-The code is open to the world, and available for you to hack on. Please feel free to browse it and play
-with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
+The code is open to the world, and available for you to hack on. Please
+feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a
+diff or prod me to pull
 from your repository :)
 
 [http://gitweb.vereshagin.org/Spunge-DB](http://gitweb.vereshagin.org/Spunge-DB)

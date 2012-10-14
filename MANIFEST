@@ -4,13 +4,15 @@ INSTALL
 LICENSE
 MANIFEST
 META.json
+META.yml
 Makefile.PL
 README
 README.html
 README.mkdn
+README.pod
 lib/Spunge/DB.pm
 t/000-report-versions.t
 t/10-use.t
 t/20-cmd.t
 t/30-tmux.t
-t/release-portability.t
+xt/release/portability.t

@@ -3,7 +3,7 @@ NAME
 
 VERSION
     This documentation refers to the module contained in the distribution
-    Spunge-DB version 0.0.10.
+    Spunge-DB version 0.0.11.
 
 SYNOPSIS
     As a helper for the debugger, the module should be used this way:
@@ -132,7 +132,12 @@ DIAGNOSTICS
         the wrong command's output.
 
 DEPENDENCIES
-    * Config is available in core "Perl" distribution since version 5.3.7
+    * "Perl 5.6.0+" is available from The Perl website <http://www.perl.org>
+
+    * Config, Cwd, DB, ExtUtils::MakeMaker, File::Find, File::Spec are
+    available in core "Perl" distribution version 5.6.0 and later
+
+    * Const::Fast is available from "CPAN"
 
     * Module::Build is available in core "Perl" distribution since version
     5.9.4
@@ -153,22 +158,20 @@ DEPENDENCIES
 
     * autodie is available in core "Perl" distribution since version 5.10.1
 
-    * ExtUtils::MakeMaker is available in core "Perl" distribution since
-    version 5
+    * "Tmux" is available from The Tmux website
+    <http://tmux.sourceforge.net>
 
-    * Module::Build is available in core "Perl" distribution since version
-    5.9.4
-
-    * File::Spec is available in core "Perl" distribution since version
-    5.4.5
-
-    * Cwd is available in core "Perl" distribution since version 5
-
-    * Const::Fast is available from "CPAN"
+    Most of them can easily be found in your operating system
+    distribution/repository.
 
 BUGS AND LIMITATIONS
     You can make new bug reports, and view existing ones, through the web
     interface at <http://bugs.vereshagin.org/product/Spunge-DB>.
+
+WEB SITE
+    The web site of Spunge::DB
+    <http://gitweb.vereshagin.org/Spunge-DB/README.html> currently consists
+    of only one page cause it's a very small module.
 
 SUPPORT
   Perldoc

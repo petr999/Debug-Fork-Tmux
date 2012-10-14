@@ -6,7 +6,8 @@ Spunge::DB - Makes fork() in debugger to open a new Tmux window
 
 =head1 VERSION
 
-This documentation refers to the module contained in the distribution L<Spunge-DB> version 0.0.10.
+This documentation refers to the module contained in the distribution
+L<Spunge-DB> version 0.0.11.
 
 =head1 SYNOPSIS
 
@@ -166,8 +167,15 @@ wrong command's output.
 
 =head1 DEPENDENCIES
 
-* L<Config>
-is available in core C<Perl> distribution since version 5.3.7
+* C<Perl 5.6.0+>
+is available from L<The Perl website|http://www.perl.org>
+
+* L<Config>, L<Cwd>, L<DB>, L<ExtUtils::MakeMaker>, L<File::Find>,
+L<File::Spec> are available in core C<Perl> distribution version 5.6.0 and
+later
+
+* L<Const::Fast>
+is available from C<CPAN>
 
 * L<Module::Build>
 is available in core C<Perl> distribution since version 5.9.4
@@ -193,27 +201,26 @@ is available from C<CPAN>
 * L<autodie>
 is available in core C<Perl> distribution since version 5.10.1
 
-* L<ExtUtils::MakeMaker>
-is available in core C<Perl> distribution since version 5
+* C<Tmux>
+is available from L<The Tmux website|http://tmux.sourceforge.net>
 
-* L<Module::Build>
-is available in core C<Perl> distribution since version 5.9.4
-
-* L<File::Spec>
-is available in core C<Perl> distribution since version 5.4.5
-
-* L<Cwd>
-is available in core C<Perl> distribution since version 5
-
-* L<Const::Fast>
-is available from C<CPAN>
+Most of them can easily be found in your operating system
+distribution/repository.
 
 =head1 BUGS AND LIMITATIONS
 
 You can make new bug reports, and view existing ones, through the
 web interface at L<http://bugs.vereshagin.org/product/Spunge-DB>.
 
-=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
+=head1 WEB SITE
+
+The web site of
+L<Spunge::DB|http://gitweb.vereshagin.org/Spunge-DB/README.html> currently
+consists of only one page cause it's a very small module.
+
+=for :stopwords =for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants
+
+=for :stopwords =for :stopwords kwalitee diff irc mailto metadata placeholders metacpan
 
 =head1 SUPPORT
 
@@ -225,18 +232,23 @@ You can find documentation for this module with the perldoc command.
 
 =head2 Email
 
-You can email the author of this module at C<peter@vereshagin.org> asking for help with any problems you have.
+You can email the author of this module at C<peter@vereshagin.org> asking
+for help with any problems you have.
 
 =head2 Bugs / Feature Requests
 
-Please report any bugs or feature requests by email to C<peter@vereshagin.org>, or through
-the web interface at L<http://bugs.vereshagin.org/product/Spunge-DB>. You will be automatically notified of any
+Please report any bugs or feature requests by email to
+C<peter@vereshagin.org>, or through
+the web interface at L<http://bugs.vereshagin.org/product/Spunge-DB>. You
+will be automatically notified of any
 progress on the request by the system.
 
 =head2 Source Code
 
-The code is open to the world, and available for you to hack on. Please feel free to browse it and play
-with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
+The code is open to the world, and available for you to hack on. Please
+feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a
+diff or prod me to pull
 from your repository :)
 
 L<http://gitweb.vereshagin.org/Spunge-DB>

@@ -330,8 +330,15 @@ wrong command's output.
 
 =head1 DEPENDENCIES
 
-* L<Config>
-is available in core C<Perl> distribution since version 5.3.7
+* C<Perl 5.6.0+>
+is available from L<The Perl website|http://www.perl.org>
+
+* L<Config>, L<Cwd>, L<DB>, L<ExtUtils::MakeMaker>, L<File::Find>,
+L<File::Spec> are available in core C<Perl> distribution version 5.6.0 and
+later
+
+* L<Const::Fast>
+is available from C<CPAN>
 
 * L<Module::Build>
 is available in core C<Perl> distribution since version 5.9.4
@@ -357,20 +364,11 @@ is available from C<CPAN>
 * L<autodie>
 is available in core C<Perl> distribution since version 5.10.1
 
-* L<ExtUtils::MakeMaker>
-is available in core C<Perl> distribution since version 5
+* C<Tmux>
+is available from L<The Tmux website|http://tmux.sourceforge.net>
 
-* L<Module::Build>
-is available in core C<Perl> distribution since version 5.9.4
-
-* L<File::Spec>
-is available in core C<Perl> distribution since version 5.4.5
-
-* L<Cwd>
-is available in core C<Perl> distribution since version 5
-
-* L<Const::Fast>
-is available from C<CPAN>
+Most of them can easily be found in your operating system
+distribution/repository.
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
@@ -379,5 +377,11 @@ console to be present in the system.
 
 For some while, the configuration is made via the package lexical
 L<constants|/CONSTANTS>.
+
+=head1 WEB SITE
+
+The web site of
+L<Spunge::DB|http://gitweb.vereshagin.org/Spunge-DB/README.html> currently
+consists of only one page cause it's a very small module.
 
 =cut

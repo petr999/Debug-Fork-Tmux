@@ -13,6 +13,7 @@ my %WriteMakefileArgs = (
   "AUTHOR" => "L<Peter Vereshagin|http://vereshagin.org> <peter\@vereshagin.org>",
   "BUILD_REQUIRES" => {
     "Config" => 0,
+    "File::Find" => 0,
     "Module::Build" => "0.3601",
     "Scalar::Util" => 0,
     "Sort::Versions" => 0,
@@ -38,7 +39,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.0.10",
+  "VERSION" => "0.0.11",
   "test" => {
     "TESTS" => "t/*.t"
   }

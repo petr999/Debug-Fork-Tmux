@@ -39,6 +39,7 @@
       "test" : {
          "requires" : {
             "Config" : "0",
+            "File::Find" : "0",
             "Scalar::Util" : "0",
             "Sort::Versions" : "0",
             "Test::Exception" : "0",
@@ -62,6 +63,6 @@
          "web" : "http://gitweb.vereshagin.org/Spunge-DB"
       }
    },
-   "version" : "0.0.10"
+   "version" : "0.0.11"
 }
 

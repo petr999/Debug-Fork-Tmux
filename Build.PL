@@ -8,6 +8,7 @@ use Module::Build 0.3601;
 my %module_build_args = (
   "build_requires" => {
     "Config" => 0,
+    "File::Find" => 0,
     "Module::Build" => "0.3601",
     "Scalar::Util" => 0,
     "Sort::Versions" => 0,
@@ -27,7 +28,7 @@ my %module_build_args = (
     "L<Peter Vereshagin|http://vereshagin.org> <peter\@vereshagin.org>"
   ],
   "dist_name" => "Spunge-DB",
-  "dist_version" => "0.0.10",
+  "dist_version" => "0.0.11",
   "license" => "bsd",
   "module_name" => "Spunge::DB",
   "recommends" => {},

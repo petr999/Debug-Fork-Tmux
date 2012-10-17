@@ -7,7 +7,7 @@ Spunge::DB - Makes fork() in debugger to open a new Tmux window
 =head1 VERSION
 
 This documentation refers to the module contained in the distribution
-L<Spunge-DB> version 0.0.11.
+L<Spunge-DB> version 0.1.0.
 
 =head1 SYNOPSIS
 
@@ -52,28 +52,6 @@ a software capable to run on a server machine without as much dependencies
 as an C<xterm>. This module is a try to pick the L<Tmux|http://tmux.sf.net>
 windows manager for such a task.
 
-=head1 CONSTANTS
-
-=head2 C<$TMUX_PATH>
-
-C<Str> path to the C<tmux> binary.
-
-=head2 C<$TMUX_BIN>
-
-C<Str> the C<tmux> binary fully qualified file name.
-
-=head2 C<@TMUX_CMD_NEWW>
-
-C<Array[Str]> the L<system()|perlfunc/system> arguments for a C<tmux>
-command for opening a new window and with output of a window address in
-C<tmux>.
-
-=head2 C<@TMUX_CMD_TTY>
-
-C<Array[Str]> the L<system()|perlfunc/system> arguments for a  C<tmux>
-command for finding a C<tty> name in the output.  Expects C<tmux>'s window
-address as the very last argument.
-
 =head1 SUBROUTINES/METHODS
 
 All of the following are functions:
@@ -91,25 +69,26 @@ Sets the C<$DB::fork_TTY> to the same C<Str> value.
 
 =head2 PRIVATE
 
-=head3 C<spawn_tty()>
+=head3 C<_spawn_tty()>
 
 Creates a C<TTY> device and returns C<Str> its name.
 
-=head3 C<tmux_new_window()>
+=head3 C<_tmux_new_window()>
 
 Creates a given C<tmux> window and returns C<Str> its id/number.
 
-=head3 C<tmux_window_tty( $window_id )>
+=head3 C<_tmux_window_tty( $window_id )>
 
-Checks for a given C<tmux> window's tty name and returns its C<Str> name.
+Finds a given C<tmux> window's tty name and returns its C<Str> name based on
+a given window id/number typically from L</_tmux_new_window()>.
 
-=head3 C<read_from_cmd( $cmd =E<gt> @args )>
+=head3 C<_read_from_cmd( $cmd =E<gt> @args )>
 
 Takes the list containing the C<Str> L<system()|perlfunc/system> command and
 C<Array> its arguments and executes it. Reads Str the output and returns it.
 Throws if no output or if the command failed.
 
-=head3 C<croak_on_cmd( $cmd =E<gt> @args, $happen )>
+=head3 C<_croak_on_cmd( $cmd =E<gt> @args, $happen )>
 
 Takes the C<Str> command, C<Array> its arguments and C<Str> the reason of
 its failure, examines the C<$?> and dies with explanation on the
@@ -120,8 +99,39 @@ L<system()|perlfunc/system> command failure.
 The module requires the L<Tmux|http://tmux.sf.net> window manager for the
 console to be present in the system.
 
-For some while, the configuration is made via the package lexical
-L<constants|/CONSTANTS>.
+Configuration is made via environment variables, the default is taken for
+each of them with no such variable is set in the environment:
+
+=head2 C<SPUNGE_TMUX_FQDN>
+
+The C<tmux> binary name with the full path.
+
+Default :   C</usr/local/bin/tmux>
+
+=head2 C<SPUNGE_TMUX_CMD_NEWW>
+
+The L<system()|perlfunc/system> arguments for a C<tmux>
+command for opening a new window and with output of a window address from
+C<tmux>. String is splitted by spaces to be a list of parameters.
+
+Dafeult :  C<neww -P>
+
+=head2 C<SPUNGE_TMUX_CMD_NEWW_EXEC>
+
+The L<system()|perlfunc/system> or a shell command to be given to the
+C<SPUNGE_TMUX_CMD_NEWW> command to be executed in a brand new created
+wiondow. It should wait unexpectedly and do nothing till the debugger
+catches the device and puts in into the proper use.
+
+Dafeult :  C<sleep 1000000>
+
+=head2 C<SPUNGE_TMUX_CMD_TTY>
+
+Command- line  parameter(s) for a  C<tmux> command to find a C<tty> name in
+the output. The string is splitted then by spaces. The C<tmux>'s window
+address is added then as the very last argument.
+
+Dafeult :  C<lsp -F #{pane_tty} -t>
 
 =head1 DIAGNOSTICS
 
@@ -201,7 +211,7 @@ is available from C<CPAN>
 * L<autodie>
 is available in core C<Perl> distribution since version 5.10.1
 
-* C<Tmux>
+* C<Tmux> v1.6+
 is available from L<The Tmux website|http://tmux.sourceforge.net>
 
 Most of them can easily be found in your operating system

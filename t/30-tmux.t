@@ -105,10 +105,10 @@ lives_and {
 
     # Create window and kill it
     ok( $window_id
-            = Spunge::DB::read_from_cmd( qw/tmux neww -P/,
+            = Spunge::DB::_read_from_cmd( qw/tmux neww -P/,
             'sleep 1000000' ) => "Created window: $window_id" );
     ok( length($window_id) => 'window id is not empty' );
-    ok( $window_tty = Spunge::DB::read_from_cmd(
+    ok( $window_tty = Spunge::DB::_read_from_cmd(
             qw/tmux lsp -F/ => '#{pane_tty}',
             '-t'            => $window_id,
         ) => "Found a tty $window_tty for a Tmux window: $window_id"
@@ -118,10 +118,10 @@ lives_and {
     is( ${^CHILD_ERROR_NATIVE} => 0, "killed window: $window_id" );
 
     # Create window with Spounge::DB and kill it
-    ok( $window_id = Spunge::DB::tmux_new_window(),
+    ok( $window_id = Spunge::DB::_tmux_new_window(),
         "Spunge::DB created a Tmux window: $window_id",
     );
-    ok( $window_tty = Spunge::DB::tmux_window_tty($window_id),
+    ok( $window_tty = Spunge::DB::_tmux_window_tty($window_id),
         "Spunge::DB found a tty $window_tty for a Tmux window: $window_id",
     );
     ok( length($window_id)  => 'window id is not empty' );

@@ -18,27 +18,14 @@ use Cwd;
 # Dioes in a nicer way
 use Carp;
 
+# Reads configuration
+use Spunge::DB::Config;
+
 # Makes constants possible
 use Const::Fast;
 
 ### CONSTANTS ###
 #
-# Path to the 'tmux' binary
-# Requires  :   Cwd
-const my $TMUX_PATH => Cwd::realpath('/usr/local/bin');
-
-# 'tmux' binary itself
-# Depends   :   On $TMUX_PATH
-# Requires  :   File::Spec
-const my $TMUX_BIN => File::Spec->catfile( $TMUX_PATH => 'tmux' );
-
-# 'tmux' command for a new window returning the 'tmux id' for the window
-const my @TMUX_CMD_NEWW =>
-    ( $TMUX_BIN => ( 'new-window' => '-P', 'sleep 1000000' ), );
-
-# 'tmux' command for output of a tty name of the window supplied.
-const my @TMUX_CMD_TTY =>
-    ( $TMUX_BIN => ( qw/lsp -F/, '#{pane_tty}', '-t' ) );
 
 ### SUBS ###
 #
@@ -52,7 +39,7 @@ const my @TMUX_CMD_TTY =>
 sub DB::get_fork_TTY {
 
     # Create a TTY
-    my $tty_name = Spunge::DB::spawn_tty();
+    my $tty_name = Spunge::DB::_spawn_tty();
 
     # Output the name both to a variable and to the caller
     no warnings qw/once/;
@@ -64,11 +51,11 @@ sub DB::get_fork_TTY {
 # Spawns a TTY and returns its name
 # Takes     :   n/a
 # Returns   :   Str tty name
-sub spawn_tty {
+sub _spawn_tty {
 
     # Create window and get its tty name
-    my $window_id = tmux_new_window();
-    my $tty_name  = tmux_window_tty($window_id);
+    my $window_id = _tmux_new_window();
+    my $tty_name  = _tmux_window_tty($window_id);
 
     return $tty_name;
 }
@@ -76,10 +63,17 @@ sub spawn_tty {
 # Function
 # Creates new 'tmux' window  and returns its id/number
 # Takes     :   n/a
-# Depends   :   On @TMUX_CMD_NEWW package lexical
+# Depends   :   On 'tmux_fqdn', 'tmux_neww', 'tmux_neww_exec' configuration
+#               parameters
 # Returns   :   Str id/number of the created 'tmux' window
-sub tmux_new_window {
-    my $window_id = read_from_cmd(@TMUX_CMD_NEWW);
+sub _tmux_new_window {
+    my @cmd_to_read = (
+        Spunge::DB::Config->get_config('tmux_fqdn'),
+        split( /\s+/, Spunge::DB::Config->get_config('tmux_cmd_neww') ),
+        Spunge::DB::Config->get_config('tmux_cmd_neww_exec'),
+    );
+
+    my $window_id = _read_from_cmd(@cmd_to_read);
 
     return $window_id;
 }
@@ -87,14 +81,19 @@ sub tmux_new_window {
 # Function
 # Gets a 'tty' name from 'tmux's window id/number
 # Takes     :   Str 'tmux' window id/number
-# Depends   :   On @TMUX_CMD_TTY package lexical
+# Depends   :   On 'tmux_fqdn', 'tmux_cmd_tty' configuration parameters
 # Returns   :   Str 'tty' device name of the 'tmux' window
-sub tmux_window_tty {
+sub _tmux_window_tty {
     my $window_id = shift;
 
     # Concatenate the 'tmux' command and read its output
-    my @tmux_cmd = ( @TMUX_CMD_TTY, $window_id );
-    my $tty_name = read_from_cmd(@tmux_cmd);
+    my @cmd_to_read = (
+        Spunge::DB::Config->get_config('tmux_fqdn'),
+        split( /\s+/, Spunge::DB::Config->get_config('tmux_cmd_tty') ),
+        $window_id,
+    );
+    my @tmux_cmd = (@cmd_to_read);
+    my $tty_name = _read_from_cmd(@tmux_cmd);
 
     return $tty_name;
 }
@@ -106,16 +105,16 @@ sub tmux_window_tty {
 # Throws    :   If command failed or the output is not the non-empty Str
 #               single line
 # Returns   :   Output of the command supplied with parameters as arguments
-sub read_from_cmd {
+sub _read_from_cmd {
     my @cmd_and_args = @_;
 
     # Open the pipe to read
-    croak_on_cmd( @cmd_and_args, "failed opening command: $!" )
+    _croak_on_cmd( @cmd_and_args, "failed opening command: $!" )
         unless open my $cmd_output_fh => '-|',
         @cmd_and_args;
 
     # Read a line from the command
-    croak_on_cmd( @cmd_and_args, "didn't write a line" )
+    _croak_on_cmd( @cmd_and_args, "didn't write a line" )
         unless defined($cmd_output_fh)
         and ( 0 != $cmd_output_fh )
         and my $cmd_out = <$cmd_output_fh>;
@@ -123,13 +122,13 @@ sub read_from_cmd {
     # If still a byte is readable then die as the file handle should be
     # closed already
     my $read_rv = read $cmd_output_fh => my $buf, 1;
-    croak_on_cmd( @cmd_and_args, "failed reading command: $!" )
+    _croak_on_cmd( @cmd_and_args, "failed reading command: $!" )
         unless defined $read_rv;
-    croak_on_cmd( @cmd_and_args, "did not finish" ) unless 0 == $read_rv;
+    _croak_on_cmd( @cmd_and_args, "did not finish" ) unless 0 == $read_rv;
 
     # Die on empty output
     chomp $cmd_out;
-    croak_on_cmd( @cmd_and_args, "provided empty string" )
+    _croak_on_cmd( @cmd_and_args, "provided empty string" )
         unless length $cmd_out;
 
     return $cmd_out;
@@ -143,7 +142,7 @@ sub read_from_cmd {
 # Depends   :   On $? global variable set by system command failure
 # Throws    :   Always
 # Returns   :   n/a
-sub croak_on_cmd {
+sub _croak_on_cmd {
     my @cmd_args_msg = @_;
 
     if ( defined $? ) {
@@ -226,28 +225,6 @@ a software capable to run on a server machine without as much dependencies
 as an C<xterm>. This module is a try to pick the L<Tmux|http://tmux.sf.net>
 windows manager for such a task.
 
-=head1 CONSTANTS
-
-=const C<$TMUX_PATH>
-
-C<Str> path to the C<tmux> binary.
-
-=const C<$TMUX_BIN>
-
-C<Str> the C<tmux> binary fully qualified file name.
-
-=const C<@TMUX_CMD_NEWW>
-
-C<Array[Str]> the L<system()|perlfunc/system> arguments for a C<tmux>
-command for opening a new window and with output of a window address in
-C<tmux>.
-
-=const C<@TMUX_CMD_TTY>
-
-C<Array[Str]> the L<system()|perlfunc/system> arguments for a  C<tmux>
-command for finding a C<tty> name in the output.  Expects C<tmux>'s window
-address as the very last argument.
-
 =head1 SUBROUTINES/METHODS
 
 All of the following are functions:
@@ -261,25 +238,26 @@ new window created for the debugger's new process.
 
 Sets the C<$DB::fork_TTY> to the same C<Str> value.
 
-=sub C<spawn_tty()>
+=sub C<_spawn_tty()>
 
 Creates a C<TTY> device and returns C<Str> its name.
 
-=sub C<tmux_new_window()>
+=sub C<_tmux_new_window()>
 
 Creates a given C<tmux> window and returns C<Str> its id/number.
 
-=sub C<tmux_window_tty( $window_id )>
+=sub C<_tmux_window_tty( $window_id )>
 
-Checks for a given C<tmux> window's tty name and returns its C<Str> name.
+Finds a given C<tmux> window's tty name and returns its C<Str> name based on
+a given window id/number typically from L</_tmux_new_window()>.
 
-=sub C<read_from_cmd( $cmd =E<gt> @args )>
+=sub C<_read_from_cmd( $cmd =E<gt> @args )>
 
 Takes the list containing the C<Str> L<system()|perlfunc/system> command and
 C<Array> its arguments and executes it. Reads Str the output and returns it.
 Throws if no output or if the command failed.
 
-=sub C<croak_on_cmd( $cmd =E<gt> @args, $happen )>
+=sub C<_croak_on_cmd( $cmd =E<gt> @args, $happen )>
 
 Takes the C<Str> command, C<Array> its arguments and C<Str> the reason of
 its failure, examines the C<$?> and dies with explanation on the
@@ -364,7 +342,7 @@ is available from C<CPAN>
 * L<autodie>
 is available in core C<Perl> distribution since version 5.10.1
 
-* C<Tmux>
+* C<Tmux> v1.6+
 is available from L<The Tmux website|http://tmux.sourceforge.net>
 
 Most of them can easily be found in your operating system
@@ -375,8 +353,39 @@ distribution/repository.
 The module requires the L<Tmux|http://tmux.sf.net> window manager for the
 console to be present in the system.
 
-For some while, the configuration is made via the package lexical
-L<constants|/CONSTANTS>.
+Configuration is made via environment variables, the default is taken for
+each of them with no such variable is set in the environment:
+
+=head2 C<SPUNGE_TMUX_FQDN>
+
+The C<tmux> binary name with the full path.
+
+Default :   C</usr/local/bin/tmux>
+
+=head2 C<SPUNGE_TMUX_CMD_NEWW>
+
+The L<system()|perlfunc/system> arguments for a C<tmux>
+command for opening a new window and with output of a window address from
+C<tmux>. String is splitted by spaces to be a list of parameters.
+
+Dafeult :  C<neww -P>
+
+=head2 C<SPUNGE_TMUX_CMD_NEWW_EXEC>
+
+The L<system()|perlfunc/system> or a shell command to be given to the
+C<SPUNGE_TMUX_CMD_NEWW> command to be executed in a brand new created
+wiondow. It should wait unexpectedly and do nothing till the debugger
+catches the device and puts in into the proper use.
+
+Dafeult :  C<sleep 1000000>
+
+=head2 C<SPUNGE_TMUX_CMD_TTY>
+
+Command- line  parameter(s) for a  C<tmux> command to find a C<tty> name in
+the output. The string is splitted then by spaces. The C<tmux>'s window
+address is added then as the very last argument.
+
+Dafeult :  C<lsp -F #{pane_tty} -t>
 
 =head1 WEB SITE
 

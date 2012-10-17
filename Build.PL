@@ -28,7 +28,7 @@ my %module_build_args = (
     "L<Peter Vereshagin|http://vereshagin.org> <peter\@vereshagin.org>"
   ],
   "dist_name" => "Spunge-DB",
-  "dist_version" => "0.0.11",
+  "dist_version" => "0.1.0",
   "license" => "bsd",
   "module_name" => "Spunge::DB",
   "recommends" => {},

@@ -45,23 +45,6 @@
           <a href='#DESCRIPTION'>DESCRIPTION</a>
         </li>
         <li class='indexItem indexItem1'>
-          <a href='#CONSTANTS'>CONSTANTS</a>
-          <ul class='indexList indexList2'>
-            <li class='indexItem indexItem2'>
-              <a href='#%24TMUX_PATH'>$TMUX_PATH</a>
-            </li>
-            <li class='indexItem indexItem2'>
-              <a href='#%24TMUX_BIN'>$TMUX_BIN</a>
-            </li>
-            <li class='indexItem indexItem2'>
-              <a href='#%40TMUX_CMD_NEWW'>@TMUX_CMD_NEWW</a>
-            </li>
-            <li class='indexItem indexItem2'>
-              <a href='#%40TMUX_CMD_TTY'>@TMUX_CMD_TTY</a>
-            </li>
-          </ul>
-        </li>
-        <li class='indexItem indexItem1'>
           <a href='#SUBROUTINES%2FMETHODS'>SUBROUTINES/METHODS</a>
           <ul class='indexList indexList2'>
             <li class='indexItem indexItem2'>
@@ -76,24 +59,24 @@
               <a href='#PRIVATE'>PRIVATE</a>
               <ul class='indexList indexList3'>
                 <li class='indexItem indexItem3'>
-                  <a href='#spawn_tty()'>spawn_tty()</a>
+                  <a href='#_spawn_tty()'>_spawn_tty()</a>
                 </li>
                 <li class='indexItem indexItem3'>
-                  <a href='#tmux_new_window()'>tmux_new_window()</a>
+                  <a href='#_tmux_new_window()'>_tmux_new_window()</a>
                 </li>
                 <li class='indexItem indexItem3'>
                   <a href=
-                  '#tmux_window_tty(_%24window_id_)'>tmux_window_tty(
+                  '#_tmux_window_tty(_%24window_id_)'>_tmux_window_tty(
                   $window_id )</a>
                 </li>
                 <li class='indexItem indexItem3'>
                   <a href=
-                  '#read_from_cmd(_%24cmd_%3D%3E_%40args_)'>read_from_cmd(
+                  '#_read_from_cmd(_%24cmd_%3D%3E_%40args_)'>_read_from_cmd(
                   $cmd =&gt; @args )</a>
                 </li>
                 <li class='indexItem indexItem3'>
                   <a href=
-                  '#croak_on_cmd(_%24cmd_%3D%3E_%40args%2C_%24happen_)'>croak_on_cmd(
+                  '#_croak_on_cmd(_%24cmd_%3D%3E_%40args%2C_%24happen_)'>_croak_on_cmd(
                   $cmd =&gt; @args, $happen )</a>
                 </li>
               </ul>
@@ -103,6 +86,21 @@
         <li class='indexItem indexItem1'>
           <a href='#CONFIGURATION_AND_ENVIRONMENT'>CONFIGURATION AND
           ENVIRONMENT</a>
+          <ul class='indexList indexList2'>
+            <li class='indexItem indexItem2'>
+              <a href='#SPUNGE_TMUX_FQDN'>SPUNGE_TMUX_FQDN</a>
+            </li>
+            <li class='indexItem indexItem2'>
+              <a href='#SPUNGE_TMUX_CMD_NEWW'>SPUNGE_TMUX_CMD_NEWW</a>
+            </li>
+            <li class='indexItem indexItem2'>
+              <a href=
+              '#SPUNGE_TMUX_CMD_NEWW_EXEC'>SPUNGE_TMUX_CMD_NEWW_EXEC</a>
+            </li>
+            <li class='indexItem indexItem2'>
+              <a href='#SPUNGE_TMUX_CMD_TTY'>SPUNGE_TMUX_CMD_TTY</a>
+            </li>
+          </ul>
         </li>
         <li class='indexItem indexItem1'>
           <a href='#DIAGNOSTICS'>DIAGNOSTICS</a>
@@ -152,7 +150,7 @@
     <p>
       This documentation refers to the module contained in the distribution
       <a href="http://search.cpan.org/perldoc?Spunge-DB" class=
-      "podlinkpod">Spunge-DB</a> version 0.0.11.
+      "podlinkpod">Spunge-DB</a> version 0.1.0.
     </p>
     <h2>
       <a class='u' href='#___top' title='click to go to top of document'
@@ -218,47 +216,6 @@
     </p>
     <h2>
       <a class='u' href='#___top' title='click to go to top of document'
-      name="CONSTANTS" id="CONSTANTS">CONSTANTS</a>
-    </h2>
-    <h3>
-      <a class='u' href='#___top' title='click to go to top of document'
-      name="$TMUX_PATH"><code>$TMUX_PATH</code></a>
-    </h3>
-    <p>
-      <code>Str</code> path to the <code>tmux</code> binary.
-    </p>
-    <h3>
-      <a class='u' href='#___top' title='click to go to top of document'
-      name="$TMUX_BIN"><code>$TMUX_BIN</code></a>
-    </h3>
-    <p>
-      <code>Str</code> the <code>tmux</code> binary fully qualified file
-      name.
-    </p>
-    <h3>
-      <a class='u' href='#___top' title='click to go to top of document'
-      name="@TMUX_CMD_NEWW"><code>@TMUX_CMD_NEWW</code></a>
-    </h3>
-    <p>
-      <code>Array[Str]</code> the <a href=
-      "http://search.cpan.org/perldoc?perlfunc#system" class=
-      "podlinkpod">system()</a> arguments for a <code>tmux</code> command
-      for opening a new window and with output of a window address in
-      <code>tmux</code>.
-    </p>
-    <h3>
-      <a class='u' href='#___top' title='click to go to top of document'
-      name="@TMUX_CMD_TTY"><code>@TMUX_CMD_TTY</code></a>
-    </h3>
-    <p>
-      <code>Array[Str]</code> the <a href=
-      "http://search.cpan.org/perldoc?perlfunc#system" class=
-      "podlinkpod">system()</a> arguments for a <code>tmux</code> command
-      for finding a <code>tty</code> name in the output. Expects
-      <code>tmux</code>'s window address as the very last argument.
-    </p>
-    <h2>
-      <a class='u' href='#___top' title='click to go to top of document'
       name="SUBROUTINES/METHODS">SUBROUTINES/METHODS</a>
     </h2>
     <p>
@@ -290,7 +247,7 @@
     </h3>
     <h4>
       <a class='u' href='#___top' title='click to go to top of document'
-      name="spawn_tty()"><code>spawn_tty()</code></a>
+      name="_spawn_tty()"><code>_spawn_tty()</code></a>
     </h4>
     <p>
       Creates a <code>TTY</code> device and returns <code>Str</code> its
@@ -298,7 +255,7 @@
     </p>
     <h4>
       <a class='u' href='#___top' title='click to go to top of document'
-      name="tmux_new_window()"><code>tmux_new_window()</code></a>
+      name="_tmux_new_window()"><code>_tmux_new_window()</code></a>
     </h4>
     <p>
       Creates a given <code>tmux</code> window and returns <code>Str</code>
@@ -306,16 +263,18 @@
     </p>
     <h4>
       <a class='u' href='#___top' title='click to go to top of document'
-      name="tmux_window_tty(_$window_id_)"><code>tmux_window_tty(
+      name="_tmux_window_tty(_$window_id_)"><code>_tmux_window_tty(
       $window_id )</code></a>
     </h4>
     <p>
-      Checks for a given <code>tmux</code> window's tty name and returns
-      its <code>Str</code> name.
+      Finds a given <code>tmux</code> window's tty name and returns its
+      <code>Str</code> name based on a given window id/number typically
+      from <a href="#_tmux_new_window()" class=
+      "podlinkpod">"_tmux_new_window()"</a>.
     </p>
     <h4>
       <a class='u' href='#___top' title='click to go to top of document'
-      name="read_from_cmd(_$cmd_=&gt;_@args_)"><code>read_from_cmd( $cmd
+      name="_read_from_cmd(_$cmd_=&gt;_@args_)"><code>_read_from_cmd( $cmd
       =&gt; @args )</code></a>
     </h4>
     <p>
@@ -327,7 +286,8 @@
     </p>
     <h4>
       <a class='u' href='#___top' title='click to go to top of document'
-      name="croak_on_cmd(_$cmd_=&gt;_@args,_$happen_)"><code>croak_on_cmd(
+      name=
+      "_croak_on_cmd(_$cmd_=&gt;_@args,_$happen_)"><code>_croak_on_cmd(
       $cmd =&gt; @args, $happen )</code></a>
     </h4>
     <p>
@@ -348,8 +308,63 @@
       the system.
     </p>
     <p>
-      For some while, the configuration is made via the package lexical
-      <a href="#CONSTANTS" class="podlinkpod">constants</a>.
+      Configuration is made via environment variables, the default is taken
+      for each of them with no such variable is set in the environment:
+    </p>
+    <h3>
+      <a class='u' href='#___top' title='click to go to top of document'
+      name="SPUNGE_TMUX_FQDN" id=
+      "SPUNGE_TMUX_FQDN"><code>SPUNGE_TMUX_FQDN</code></a>
+    </h3>
+    <p>
+      The <code>tmux</code> binary name with the full path.
+    </p>
+    <p>
+      Default : <code>/usr/local/bin/tmux</code>
+    </p>
+    <h3>
+      <a class='u' href='#___top' title='click to go to top of document'
+      name="SPUNGE_TMUX_CMD_NEWW" id=
+      "SPUNGE_TMUX_CMD_NEWW"><code>SPUNGE_TMUX_CMD_NEWW</code></a>
+    </h3>
+    <p>
+      The <a href="http://search.cpan.org/perldoc?perlfunc#system" class=
+      "podlinkpod">system()</a> arguments for a <code>tmux</code> command
+      for opening a new window and with output of a window address from
+      <code>tmux</code>. String is splitted by spaces to be a list of
+      parameters.
+    </p>
+    <p>
+      Dafeult : <code>neww -P</code>
+    </p>
+    <h3>
+      <a class='u' href='#___top' title='click to go to top of document'
+      name="SPUNGE_TMUX_CMD_NEWW_EXEC" id=
+      "SPUNGE_TMUX_CMD_NEWW_EXEC"><code>SPUNGE_TMUX_CMD_NEWW_EXEC</code></a>
+    </h3>
+    <p>
+      The <a href="http://search.cpan.org/perldoc?perlfunc#system" class=
+      "podlinkpod">system()</a> or a shell command to be given to the
+      <code>SPUNGE_TMUX_CMD_NEWW</code> command to be executed in a brand
+      new created wiondow. It should wait unexpectedly and do nothing till
+      the debugger catches the device and puts in into the proper use.
+    </p>
+    <p>
+      Dafeult : <code>sleep 1000000</code>
+    </p>
+    <h3>
+      <a class='u' href='#___top' title='click to go to top of document'
+      name="SPUNGE_TMUX_CMD_TTY" id=
+      "SPUNGE_TMUX_CMD_TTY"><code>SPUNGE_TMUX_CMD_TTY</code></a>
+    </h3>
+    <p>
+      Command- line parameter(s) for a <code>tmux</code> command to find a
+      <code>tty</code> name in the output. The string is splitted then by
+      spaces. The <code>tmux</code>'s window address is added then as the
+      very last argument.
+    </p>
+    <p>
+      Dafeult : <code>lsp -F #{pane_tty} -t</code>
     </p>
     <h2>
       <a class='u' href='#___top' title='click to go to top of document'
@@ -499,7 +514,7 @@
       distribution since version 5.10.1
     </p>
     <p>
-      * <code>Tmux</code> is available from <a href=
+      * <code>Tmux</code> v1.6+ is available from <a href=
       "http://tmux.sourceforge.net" class="podlinkurl">The Tmux website</a>
     </p>
     <p>

@@ -3,7 +3,7 @@ NAME
 
 VERSION
     This documentation refers to the module contained in the distribution
-    Spunge-DB version 0.0.11.
+    Spunge-DB version 0.1.0.
 
 SYNOPSIS
     As a helper for the debugger, the module should be used this way:
@@ -46,22 +46,6 @@ DESCRIPTION
     as an "xterm". This module is a try to pick the Tmux
     <http://tmux.sf.net> windows manager for such a task.
 
-CONSTANTS
-  $TMUX_PATH
-    "Str" path to the "tmux" binary.
-
-  $TMUX_BIN
-    "Str" the "tmux" binary fully qualified file name.
-
-  @TMUX_CMD_NEWW
-    "Array[Str]" the system() arguments for a "tmux" command for opening a
-    new window and with output of a window address in "tmux".
-
-  @TMUX_CMD_TTY
-    "Array[Str]" the system() arguments for a "tmux" command for finding a
-    "tty" name in the output. Expects "tmux"'s window address as the very
-    last argument.
-
 SUBROUTINES/METHODS
     All of the following are functions:
 
@@ -75,21 +59,22 @@ SUBROUTINES/METHODS
     Sets the $DB::fork_TTY to the same "Str" value.
 
   PRIVATE
-   "spawn_tty()"
+   "_spawn_tty()"
     Creates a "TTY" device and returns "Str" its name.
 
-   "tmux_new_window()"
+   "_tmux_new_window()"
     Creates a given "tmux" window and returns "Str" its id/number.
 
-   "tmux_window_tty( $window_id )"
-    Checks for a given "tmux" window's tty name and returns its "Str" name.
+   "_tmux_window_tty( $window_id )"
+    Finds a given "tmux" window's tty name and returns its "Str" name based
+    on a given window id/number typically from "_tmux_new_window()".
 
-   "read_from_cmd( $cmd => @args )"
+   "_read_from_cmd( $cmd => @args )"
     Takes the list containing the "Str" system() command and "Array" its
     arguments and executes it. Reads Str the output and returns it. Throws
     if no output or if the command failed.
 
-   "croak_on_cmd( $cmd => @args, $happen )"
+   "_croak_on_cmd( $cmd => @args, $happen )"
     Takes the "Str" command, "Array" its arguments and "Str" the reason of
     its failure, examines the $? and dies with explanation on the system()
     command failure.
@@ -98,8 +83,35 @@ CONFIGURATION AND ENVIRONMENT
     The module requires the Tmux <http://tmux.sf.net> window manager for the
     console to be present in the system.
 
-    For some while, the configuration is made via the package lexical
-    constants.
+    Configuration is made via environment variables, the default is taken
+    for each of them with no such variable is set in the environment:
+
+  "SPUNGE_TMUX_FQDN"
+    The "tmux" binary name with the full path.
+
+    Default : "/usr/local/bin/tmux"
+
+  "SPUNGE_TMUX_CMD_NEWW"
+    The system() arguments for a "tmux" command for opening a new window and
+    with output of a window address from "tmux". String is splitted by
+    spaces to be a list of parameters.
+
+    Dafeult : "neww -P"
+
+  "SPUNGE_TMUX_CMD_NEWW_EXEC"
+    The system() or a shell command to be given to the
+    "SPUNGE_TMUX_CMD_NEWW" command to be executed in a brand new created
+    wiondow. It should wait unexpectedly and do nothing till the debugger
+    catches the device and puts in into the proper use.
+
+    Dafeult : "sleep 1000000"
+
+  "SPUNGE_TMUX_CMD_TTY"
+    Command- line parameter(s) for a "tmux" command to find a "tty" name in
+    the output. The string is splitted then by spaces. The "tmux"'s window
+    address is added then as the very last argument.
+
+    Dafeult : "lsp -F #{pane_tty} -t"
 
 DIAGNOSTICS
     The command ...
@@ -158,7 +170,7 @@ DEPENDENCIES
 
     * autodie is available in core "Perl" distribution since version 5.10.1
 
-    * "Tmux" is available from The Tmux website
+    * "Tmux" v1.6+ is available from The Tmux website
     <http://tmux.sourceforge.net>
 
     Most of them can easily be found in your operating system

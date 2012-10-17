@@ -90,7 +90,7 @@ const $EMPTY_STR_COMMAND_RGX => qr/$EMPTYNESS_COMMAND_RGX/;
 # Throws    :   In Spunge::DB
 # Returns   :   n/a
 sub croak_without_cmd {
-    Spunge::DB::croak_on_cmd( $EMPTY_COMMAND => $EMPTY_COMMAND_MSG );
+    Spunge::DB::_croak_on_cmd( $EMPTY_COMMAND => $EMPTY_COMMAND_MSG );
 }
 
 ### MAIN ###
@@ -102,14 +102,14 @@ BAIL_OUT("died unexpectedly: $!")
 
 # Empty command dying
 BAIL_OUT("didn't die  unexpectedly")
-    unless dies_ok { croak_without_cmd(); } 'croak_on_cmd() dies';
+    unless dies_ok { croak_without_cmd(); } '_croak_on_cmd() dies';
 throws_ok { croak_without_cmd(); }
 ( $EMPTY_COMMAND_RGX, 'croak_on_cmd() throws correct string', );
 
 # Reads a single line correctly
 BAIL_OUT("died unexpectedly: $!")
     unless lives_ok {
-    Spunge::DB::read_from_cmd( @PERL_RUN_COMMON,
+    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON,
         "print \"$ONE_LINER_SINGLE_LINE\\n\"" );
 }
 'One-liner survives reading single line';
@@ -117,14 +117,14 @@ BAIL_OUT("died unexpectedly: $!")
 # Dies reading a double line
 BAIL_OUT("didn't die  unexpectedly")
     unless dies_ok {
-    Spunge::DB::read_from_cmd( @PERL_RUN_COMMON,
+    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON,
         "print \"$ONE_LINER_DOUBLE_LINE\\n\"" );
 }
 'One-liner causes Spunge::DB to die reading double line';
 
 # Dies with a correct message reading a double line
 throws_ok {
-    Spunge::DB::read_from_cmd( @PERL_RUN_COMMON,
+    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON,
         "print \"$ONE_LINER_DOUBLE_LINE\\n\"" );
 }
 $ONE_LINER_DOUBLE_LINE_RGX,
@@ -133,13 +133,13 @@ $ONE_LINER_DOUBLE_LINE_RGX,
 # Dies reading emptyness
 BAIL_OUT("didn't die  unexpectedly")
     unless dies_ok {
-    Spunge::DB::read_from_cmd( @PERL_RUN_COMMON, ";" );
+    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON, ";" );
 }
 'One-liner causes Spunge::DB to die reading emptyness';
 
 # Dies with a correct message reading emptyness
 throws_ok {
-    Spunge::DB::read_from_cmd( @PERL_RUN_COMMON, ";" );
+    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON, ";" );
 }
 $EMPTYNESS_COMMAND_RGX,
     'One-liner causes Spunge::DB to throw correct string reading emptyness';
@@ -147,13 +147,13 @@ $EMPTYNESS_COMMAND_RGX,
 # Dies reading empty string
 BAIL_OUT("didn't die  unexpectedly")
     unless dies_ok {
-    Spunge::DB::read_from_cmd( @PERL_RUN_COMMON, 'print "\n";' );
+    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON, 'print "\n";' );
 }
 'One-liner causes Spunge::DB to die reading empty string';
 
 # Dies with a correct message reading empty string
 throws_ok {
-    Spunge::DB::read_from_cmd( @PERL_RUN_COMMON, ";" );
+    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON, ";" );
 }
 $EMPTY_STR_COMMAND_RGX,
     'One-liner causes Spunge::DB to throw correct string reading empty string';
@@ -161,7 +161,7 @@ $EMPTY_STR_COMMAND_RGX,
 BAIL_OUT("died unexpectedly: $!")
     unless lives_and {
     is( my $str
-            = Spunge::DB::read_from_cmd( @PERL_RUN_COMMON,
+            = Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON,
             "print \"$ONE_LINER_SINGLE_LINE\\n\"" ) => $ONE_LINER_SINGLE_LINE,
         'One-liner supplies correct string'
     );

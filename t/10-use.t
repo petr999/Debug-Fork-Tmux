@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 # Tests if all perl files are ok and use strict
-
+#
+# Helps you to behave
 use strict;
 use warnings;
 
@@ -24,21 +25,18 @@ const my @CHECK_ALL_OK => qw/lib t/;
 const my @CHECK_SYNTAX_ONLY => grep { -d $_ } qw/xt/;
 
 ### MAIN ###
+# Requires  :   Test::Strict
 #
 # Check syntax, strict and warnings, too
-# Requires  :   Test::Strict
 # Depends   :   On @CHECK_ALL_OK lexical
-all_perl_files_ok(@CHECK_ALL_OK);
+{
+    local $Test::Strict::TEST_WARNINGS = 1;
+    all_perl_files_ok(@CHECK_ALL_OK);
+}
 
-# Walk through every directory for a syntax check
-# Requires  :   File::Find, Test::Strict
+# Check syntax of other perl files
 # Depends   :   On @CHECK_SYNTAX_ONLY lexical
-if ( 0 + @CHECK_SYNTAX_ONLY ) {
-    File::Find::find(
-        sub {
-            if ( -f $File::Find::name ) {
-                syntax_ok($File::Find::name);
-            }
-        } => @CHECK_SYNTAX_ONLY,
-    );
+{
+    local $Test::Strict::TEST_STRICT = '';
+    all_perl_files_ok(@CHECK_SYNTAX_ONLY);
 }

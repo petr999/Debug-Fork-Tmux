@@ -14,9 +14,11 @@ my %WriteMakefileArgs = (
   "BUILD_REQUIRES" => {
     "Config" => 0,
     "File::Find" => 0,
+    "File::Temp" => 0,
     "Module::Build" => "0.3601",
     "Scalar::Util" => 0,
     "Sort::Versions" => 0,
+    "Sub::Name" => 0,
     "Test::Exception" => 0,
     "Test::More" => "0.94",
     "Test::Most" => 0,
@@ -24,13 +26,12 @@ my %WriteMakefileArgs = (
     "autodie" => 0
   },
   "CONFIGURE_REQUIRES" => {
-    "ExtUtils::MakeMaker" => "6.30",
     "Module::Build" => "0.3601"
   },
-  "DISTNAME" => "Spunge-DB",
+  "DISTNAME" => "Debug-Fork-Tmux",
   "EXE_FILES" => [],
   "LICENSE" => "bsd",
-  "NAME" => "Spunge::DB",
+  "NAME" => "Debug::Fork::Tmux",
   "PREREQ_PM" => {
     "Carp" => 0,
     "Const::Fast" => 0,
@@ -39,7 +40,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.1.0",
+  "VERSION" => "1.000000",
   "test" => {
     "TESTS" => "t/*.t"
   }

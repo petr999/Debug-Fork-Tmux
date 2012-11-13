@@ -2,22 +2,29 @@
 
 =head1 NAME
 
-Spunge::DB - Makes fork() in debugger to open a new Tmux window
+Debug::Fork::Tmux - Makes fork() in debugger to open a new Tmux window
 
 =head1 VERSION
 
-This documentation refers to the module contained in the distribution
-L<Spunge-DB> version 0.1.0.
+This documentation refers to the module contained in the distribution C<Debug-Fork-Tmux> version 1.000000.
 
 =head1 SYNOPSIS
 
-As a helper for the debugger, the module should be used this way:
+    #!/usr/bin/perl -d
+    #
+    # ABSTRACT: Debug the fork()-contained code in this file
+    #
+    # Make fork()s debuggable with Tmux
+    use Debug::Fork::Tmux;
 
-    perl -MSpunge::DB -d your_script.pl
-
-You should run it from inside the C<tmux> window manager.
+    # See what happens in your debugger then...
+    fork;
 
 =head1 DESCRIPTION
+
+The real usage example of this module is:
+
+    perl -MDebug::Fork::Tmux -d your_script.pl
 
 The Perl's standard debugger requires additional stuff when the debugged
 Perl program use the L<fork()|perlfunc/fork> built-in.
@@ -85,7 +92,7 @@ a given window id/number typically from L</_tmux_new_window()>.
 =head3 C<_read_from_cmd( $cmd =E<gt> @args )>
 
 Takes the list containing the C<Str> L<system()|perlfunc/system> command and
-C<Array> its arguments and executes it. Reads Str the output and returns it.
+C<Array> its arguments and executes it. Reads C<Str> the output and returns it.
 Throws if no output or if the command failed.
 
 =head3 C<_croak_on_cmd( $cmd =E<gt> @args, $happen )>
@@ -112,26 +119,26 @@ Default :   C</usr/local/bin/tmux>
 
 The L<system()|perlfunc/system> arguments for a C<tmux>
 command for opening a new window and with output of a window address from
-C<tmux>. String is splitted by spaces to be a list of parameters.
+C<tmux>. String is sliced by spaces to be a list of parameters.
 
-Dafeult :  C<neww -P>
+Default :  C<neww -P>
 
 =head2 C<SPUNGE_TMUX_CMD_NEWW_EXEC>
 
 The L<system()|perlfunc/system> or a shell command to be given to the
 C<SPUNGE_TMUX_CMD_NEWW> command to be executed in a brand new created
-wiondow. It should wait unexpectedly and do nothing till the debugger
+window. It should wait unexpectedly and do nothing till the debugger
 catches the device and puts in into the proper use.
 
-Dafeult :  C<sleep 1000000>
+Default :  C<sleep 1000000>
 
 =head2 C<SPUNGE_TMUX_CMD_TTY>
 
 Command- line  parameter(s) for a  C<tmux> command to find a C<tty> name in
-the output. The string is splitted then by spaces. The C<tmux>'s window
+the output. The string is sliced then by spaces. The C<tmux>'s window
 address is added then as the very last argument.
 
-Dafeult :  C<lsp -F #{pane_tty} -t>
+Default :  C<lsp -F #{pane_tty} -t>
 
 =head1 DIAGNOSTICS
 
@@ -139,7 +146,7 @@ Dafeult :  C<lsp -F #{pane_tty} -t>
 
 =item The command ...
 
-Typically the error message starts with the command the L<Spunge::DB> tried
+Typically the error message starts with the command the L<Debug::Fork::Tmux> tried
 to execute, including the command's arguments.
 
 =item failed opening command: ...
@@ -220,17 +227,15 @@ distribution/repository.
 =head1 BUGS AND LIMITATIONS
 
 You can make new bug reports, and view existing ones, through the
-web interface at L<http://bugs.vereshagin.org/product/Spunge-DB>.
+web interface at L<http://bugs.vereshagin.org/product/Debug-Fork-Tmux>.
 
 =head1 WEB SITE
 
 The web site of
-L<Spunge::DB|http://gitweb.vereshagin.org/Spunge-DB/README.html> currently
+L<Debug::Fork::Tmux|http://gitweb.vereshagin.org/Debug-Fork-Tmux/README.html> currently
 consists of only one page cause it's a very small module.
 
-=for :stopwords =for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants
-
-=for :stopwords =for :stopwords kwalitee diff irc mailto metadata placeholders metacpan
+=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
 
 =head1 SUPPORT
 
@@ -238,32 +243,27 @@ consists of only one page cause it's a very small module.
 
 You can find documentation for this module with the perldoc command.
 
-  perldoc Spunge::DB
+  perldoc Debug::Fork::Tmux
 
 =head2 Email
 
-You can email the author of this module at C<peter@vereshagin.org> asking
-for help with any problems you have.
+You can email the author of this module at C<peter@vereshagin.org> asking for help with any problems you have.
 
 =head2 Bugs / Feature Requests
 
-Please report any bugs or feature requests by email to
-C<peter@vereshagin.org>, or through
-the web interface at L<http://bugs.vereshagin.org/product/Spunge-DB>. You
-will be automatically notified of any
+Please report any bugs or feature requests by email to C<peter@vereshagin.org>, or through
+the web interface at L<http://bugs.vereshagin.org/product/Debug-Fork-Tmux>. You will be automatically notified of any
 progress on the request by the system.
 
 =head2 Source Code
 
-The code is open to the world, and available for you to hack on. Please
-feel free to browse it and play
-with it, or whatever. If you want to contribute patches, please send me a
-diff or prod me to pull
+The code is open to the world, and available for you to hack on. Please feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
 from your repository :)
 
-L<http://gitweb.vereshagin.org/Spunge-DB>
+L<http://gitweb.vereshagin.org/Debug-Fork-Tmux>
 
-  git clone https://github.com/petr999/Spunge-DB.git
+  git clone https://github.com/petr999/Debug-Fork-Tmux.git
 
 =head1 AUTHOR
 
@@ -276,6 +276,22 @@ This software is Copyright (c) 2012 by Peter Vereshagin.
 This is free software, licensed under:
 
   The (three-clause) BSD License
+
+=head1 SEE ALSO
+
+Please see those modules/websites for more information related to this module.
+
+=over 4
+
+=item *
+
+L<Debug::Fork::Tmux::Config|Debug::Fork::Tmux::Config>
+
+=item *
+
+L<http://perlmonks.org/?node_id=128283|http://perlmonks.org/?node_id=128283>
+
+=back
 
 =head1 DISCLAIMER OF WARRANTY
 

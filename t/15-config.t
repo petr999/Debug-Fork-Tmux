@@ -14,15 +14,15 @@ use warnings;
 # Makes this test a test
 use Test::Most qw/bail/;    # BAIL_OUT() on any failure
 
-# Block with localized %ENV to load Spunge::DB::Config
+# Block with localized %ENV to load Debug::Fork::Tmux::Config
 {
 
-# Clean up environment, localize it first
-# Depends   :   On %ENV global of main::
-local %ENV;    # keep from change the system environment and empty it
+    # Clean up environment, localize it first
+    # Depends   :   On %ENV global of main::
+    local %ENV;    # keep from change the system environment and empty it
 
-# Loads main app module
-use_ok('Spunge::DB::Config');    # No special requirements
+    # Loads main app module
+    use_ok('Debug::Fork::Tmux::Config');    # No special requirements
 
 }
 
@@ -32,17 +32,17 @@ use_ok('Spunge::DB::Config');    # No special requirements
 use Const::Fast;
 
 # Keys to get configuration for
-const my @CONF_KEYS => Spunge::DB::Config->get_all_config_keys;
+const my @CONF_KEYS => Debug::Fork::Tmux::Config->get_all_config_keys;
 
 ok( 0 + @CONF_KEYS => 'Configuration has keys' );
 
 ### MAIN ###
-# Require   :   Test::Most, Spunge::DB::Config
+# Require   :   Test::Most, Debug::Fork::Tmux::Config
 #
 
 foreach my $key (@CONF_KEYS) {
     my $value;
-    ok( $value = Spunge::DB::Config->get_config($key) =>
+    ok( $value = Debug::Fork::Tmux::Config->get_config($key) =>
             "Get config for '$key'" );
     is( ref($value) => '', "Value for '$key' is a scalar" );
     ok( length($value) => "Value for '$key' is non-empty" );

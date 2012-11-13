@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-# Tests commands issued from Spunge::DB.
+# Tests commands issued from Debug::Fork::Tmux.
 #
 # Copyright (C) 2012 Peter Vereshagin <peter@vereshagin.org>
 # All rights reserved.
@@ -15,7 +15,7 @@ use warnings;
 use Test::More;    # Continues till done_testing()
 
 # Loads main app module
-use Spunge::DB;
+use Debug::Fork::Tmux;
 
 # Catches exceptions
 use Test::Exception;
@@ -64,7 +64,7 @@ my $ONE_LINER_DOUBLE_LINE_RGX = join ' ', '^The command', @PERL_RUN_COMMON,
 # For one-liner to match 'perl -e "\n"'
 $ONE_LINER_DOUBLE_LINE_RGX =~ s/\\/\\\\/g;
 $ONE_LINER_DOUBLE_LINE_RGX = join ' ', $ONE_LINER_DOUBLE_LINE_RGX,
-    'did not finish child exited with value 0 at', $0, 'line \d+\.$';
+    'did not finish: .* child exited with value 0 at', $0, 'line \d+\.$';
 const $ONE_LINER_DOUBLE_LINE_RGX => qr/$ONE_LINER_DOUBLE_LINE_RGX/;
 
 # Emptyness print command result regex
@@ -87,10 +87,10 @@ const $EMPTY_STR_COMMAND_RGX => qr/$EMPTYNESS_COMMAND_RGX/;
 # Croaks on an unexistent command
 # Takes     :   n/a
 # Depends   :   On $EMPTY_COMMAND, $EMPTY_COMMAND_MSG package lexicals
-# Throws    :   In Spunge::DB
+# Throws    :   In Debug::Fork::Tmux
 # Returns   :   n/a
 sub croak_without_cmd {
-    Spunge::DB::_croak_on_cmd( $EMPTY_COMMAND => $EMPTY_COMMAND_MSG );
+    Debug::Fork::Tmux::_croak_on_cmd( $EMPTY_COMMAND => $EMPTY_COMMAND_MSG );
 }
 
 ### MAIN ###
@@ -109,7 +109,7 @@ throws_ok { croak_without_cmd(); }
 # Reads a single line correctly
 BAIL_OUT("died unexpectedly: $!")
     unless lives_ok {
-    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON,
+    Debug::Fork::Tmux::_read_from_cmd( @PERL_RUN_COMMON,
         "print \"$ONE_LINER_SINGLE_LINE\\n\"" );
 }
 'One-liner survives reading single line';
@@ -117,51 +117,51 @@ BAIL_OUT("died unexpectedly: $!")
 # Dies reading a double line
 BAIL_OUT("didn't die  unexpectedly")
     unless dies_ok {
-    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON,
+    Debug::Fork::Tmux::_read_from_cmd( @PERL_RUN_COMMON,
         "print \"$ONE_LINER_DOUBLE_LINE\\n\"" );
 }
-'One-liner causes Spunge::DB to die reading double line';
+'One-liner causes Debug::Fork::Tmux to die reading double line';
 
 # Dies with a correct message reading a double line
 throws_ok {
-    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON,
+    Debug::Fork::Tmux::_read_from_cmd( @PERL_RUN_COMMON,
         "print \"$ONE_LINER_DOUBLE_LINE\\n\"" );
 }
 $ONE_LINER_DOUBLE_LINE_RGX,
-    'One-liner causes Spunge::DB to throw correct string reading double line';
+    'One-liner causes Debug::Fork::Tmux to throw correct string reading double line';
 
 # Dies reading emptyness
 BAIL_OUT("didn't die  unexpectedly")
     unless dies_ok {
-    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON, ";" );
+    Debug::Fork::Tmux::_read_from_cmd( @PERL_RUN_COMMON, ";" );
 }
-'One-liner causes Spunge::DB to die reading emptyness';
+'One-liner causes Debug::Fork::Tmux to die reading emptyness';
 
 # Dies with a correct message reading emptyness
 throws_ok {
-    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON, ";" );
+    Debug::Fork::Tmux::_read_from_cmd( @PERL_RUN_COMMON, ";" );
 }
 $EMPTYNESS_COMMAND_RGX,
-    'One-liner causes Spunge::DB to throw correct string reading emptyness';
+    'One-liner causes Debug::Fork::Tmux to throw correct string reading emptyness';
 
 # Dies reading empty string
 BAIL_OUT("didn't die  unexpectedly")
     unless dies_ok {
-    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON, 'print "\n";' );
+    Debug::Fork::Tmux::_read_from_cmd( @PERL_RUN_COMMON, 'print "\n";' );
 }
-'One-liner causes Spunge::DB to die reading empty string';
+'One-liner causes Debug::Fork::Tmux to die reading empty string';
 
 # Dies with a correct message reading empty string
 throws_ok {
-    Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON, ";" );
+    Debug::Fork::Tmux::_read_from_cmd( @PERL_RUN_COMMON, ";" );
 }
 $EMPTY_STR_COMMAND_RGX,
-    'One-liner causes Spunge::DB to throw correct string reading empty string';
+    'One-liner causes Debug::Fork::Tmux to throw correct string reading empty string';
 
 BAIL_OUT("died unexpectedly: $!")
     unless lives_and {
     is( my $str
-            = Spunge::DB::_read_from_cmd( @PERL_RUN_COMMON,
+            = Debug::Fork::Tmux::_read_from_cmd( @PERL_RUN_COMMON,
             "print \"$ONE_LINER_SINGLE_LINE\\n\"" ) => $ONE_LINER_SINGLE_LINE,
         'One-liner supplies correct string'
     );

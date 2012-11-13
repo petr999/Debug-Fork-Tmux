@@ -9,9 +9,11 @@ my %module_build_args = (
   "build_requires" => {
     "Config" => 0,
     "File::Find" => 0,
+    "File::Temp" => 0,
     "Module::Build" => "0.3601",
     "Scalar::Util" => 0,
     "Sort::Versions" => 0,
+    "Sub::Name" => 0,
     "Test::Exception" => 0,
     "Test::More" => "0.94",
     "Test::Most" => 0,
@@ -20,17 +22,16 @@ my %module_build_args = (
     "perl" => "5.004"
   },
   "configure_requires" => {
-    "ExtUtils::MakeMaker" => "6.30",
     "Module::Build" => "0.3601"
   },
   "dist_abstract" => "Makes fork() in debugger to open a new Tmux window",
   "dist_author" => [
     "L<Peter Vereshagin|http://vereshagin.org> <peter\@vereshagin.org>"
   ],
-  "dist_name" => "Spunge-DB",
-  "dist_version" => "0.1.0",
+  "dist_name" => "Debug-Fork-Tmux",
+  "dist_version" => "1.000000",
   "license" => "bsd",
-  "module_name" => "Spunge::DB",
+  "module_name" => "Debug::Fork::Tmux",
   "recommends" => {},
   "recursive_test_files" => 1,
   "requires" => {

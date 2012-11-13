@@ -1,18 +1,26 @@
 NAME
-    Spunge::DB - Makes fork() in debugger to open a new Tmux window
+    Debug::Fork::Tmux - Makes fork() in debugger to open a new Tmux window
 
 VERSION
     This documentation refers to the module contained in the distribution
-    Spunge-DB version 0.1.0.
+    "Debug-Fork-Tmux" version 1.000000.
 
 SYNOPSIS
-    As a helper for the debugger, the module should be used this way:
+        #!/usr/bin/perl -d
+        #
+        # ABSTRACT: Debug the fork()-contained code in this file
+        #
+        # Make fork()s debuggable with Tmux
+        use Debug::Fork::Tmux;
 
-        perl -MSpunge::DB -d your_script.pl
-
-    You should run it from inside the "tmux" window manager.
+        # See what happens in your debugger then...
+        fork;
 
 DESCRIPTION
+    The real usage example of this module is:
+
+        perl -MDebug::Fork::Tmux -d your_script.pl
+
     The Perl's standard debugger requires additional stuff when the debugged
     Perl program use the fork() built-in.
 
@@ -71,7 +79,7 @@ SUBROUTINES/METHODS
 
    "_read_from_cmd( $cmd => @args )"
     Takes the list containing the "Str" system() command and "Array" its
-    arguments and executes it. Reads Str the output and returns it. Throws
+    arguments and executes it. Reads "Str" the output and returns it. Throws
     if no output or if the command failed.
 
    "_croak_on_cmd( $cmd => @args, $happen )"
@@ -93,30 +101,31 @@ CONFIGURATION AND ENVIRONMENT
 
   "SPUNGE_TMUX_CMD_NEWW"
     The system() arguments for a "tmux" command for opening a new window and
-    with output of a window address from "tmux". String is splitted by
-    spaces to be a list of parameters.
+    with output of a window address from "tmux". String is sliced by spaces
+    to be a list of parameters.
 
-    Dafeult : "neww -P"
+    Default : "neww -P"
 
   "SPUNGE_TMUX_CMD_NEWW_EXEC"
     The system() or a shell command to be given to the
     "SPUNGE_TMUX_CMD_NEWW" command to be executed in a brand new created
-    wiondow. It should wait unexpectedly and do nothing till the debugger
+    window. It should wait unexpectedly and do nothing till the debugger
     catches the device and puts in into the proper use.
 
-    Dafeult : "sleep 1000000"
+    Default : "sleep 1000000"
 
   "SPUNGE_TMUX_CMD_TTY"
     Command- line parameter(s) for a "tmux" command to find a "tty" name in
-    the output. The string is splitted then by spaces. The "tmux"'s window
+    the output. The string is sliced then by spaces. The "tmux"'s window
     address is added then as the very last argument.
 
-    Dafeult : "lsp -F #{pane_tty} -t"
+    Default : "lsp -F #{pane_tty} -t"
 
 DIAGNOSTICS
     The command ...
-        Typically the error message starts with the command the Spunge::DB
-        tried to execute, including the command's arguments.
+        Typically the error message starts with the command the
+        Debug::Fork::Tmux tried to execute, including the command's
+        arguments.
 
     failed opening command: ...
         The command was not taken by the system as an executable binary
@@ -178,18 +187,18 @@ DEPENDENCIES
 
 BUGS AND LIMITATIONS
     You can make new bug reports, and view existing ones, through the web
-    interface at <http://bugs.vereshagin.org/product/Spunge-DB>.
+    interface at <http://bugs.vereshagin.org/product/Debug-Fork-Tmux>.
 
 WEB SITE
-    The web site of Spunge::DB
-    <http://gitweb.vereshagin.org/Spunge-DB/README.html> currently consists
-    of only one page cause it's a very small module.
+    The web site of Debug::Fork::Tmux
+    <http://gitweb.vereshagin.org/Debug-Fork-Tmux/README.html> currently
+    consists of only one page cause it's a very small module.
 
 SUPPORT
   Perldoc
     You can find documentation for this module with the perldoc command.
 
-      perldoc Spunge::DB
+      perldoc Debug::Fork::Tmux
 
   Email
     You can email the author of this module at "peter@vereshagin.org" asking
@@ -198,7 +207,7 @@ SUPPORT
   Bugs / Feature Requests
     Please report any bugs or feature requests by email to
     "peter@vereshagin.org", or through the web interface at
-    <http://bugs.vereshagin.org/product/Spunge-DB>. You will be
+    <http://bugs.vereshagin.org/product/Debug-Fork-Tmux>. You will be
     automatically notified of any progress on the request by the system.
 
   Source Code
@@ -207,9 +216,9 @@ SUPPORT
     contribute patches, please send me a diff or prod me to pull from your
     repository :)
 
-    <http://gitweb.vereshagin.org/Spunge-DB>
+    <http://gitweb.vereshagin.org/Debug-Fork-Tmux>
 
-      git clone https://github.com/petr999/Spunge-DB.git
+      git clone https://github.com/petr999/Debug-Fork-Tmux.git
 
 AUTHOR
     Peter Vereshagin <http://vereshagin.org> <peter@vereshagin.org>
@@ -220,6 +229,14 @@ COPYRIGHT AND LICENSE
     This is free software, licensed under:
 
       The (three-clause) BSD License
+
+SEE ALSO
+    Please see those modules/websites for more information related to this
+    module.
+
+    *   Debug::Fork::Tmux::Config
+
+    *   <http://perlmonks.org/?node_id=128283>
 
 DISCLAIMER OF WARRANTY
     BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY

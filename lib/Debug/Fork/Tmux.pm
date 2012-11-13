@@ -1,12 +1,12 @@
 # ABSTRACT: Makes fork() in debugger to open a new Tmux window
-package Spunge::DB;
-
-# VERSION
+package Debug::Fork::Tmux;
 
 # Helps you to behave
 use strict;
 use warnings;
 
+# VERSION
+#
 ### MODULES ###
 #
 # Glues up path components
@@ -19,7 +19,7 @@ use Cwd;
 use Carp;
 
 # Reads configuration
-use Spunge::DB::Config;
+use Debug::Fork::Tmux::Config;
 
 # Makes constants possible
 use Const::Fast;
@@ -32,14 +32,14 @@ use Const::Fast;
 # Function
 # Gets the tty name, sets the $DB::fork_TTY to it and returns it.
 # Takes     :   n/a
-# Requires  :   DB, Spunge::DB
+# Requires  :   DB, Debug::Fork::Tmux
 # Overrides :   DB::get_fork_TTY()
 # Changes   :   $DB::fork_TTY
 # Returns   :   Str tty name $DB::fork_TTY
 sub DB::get_fork_TTY {
 
     # Create a TTY
-    my $tty_name = Spunge::DB::_spawn_tty();
+    my $tty_name = Debug::Fork::Tmux::_spawn_tty();
 
     # Output the name both to a variable and to the caller
     no warnings qw/once/;
@@ -68,9 +68,11 @@ sub _spawn_tty {
 # Returns   :   Str id/number of the created 'tmux' window
 sub _tmux_new_window {
     my @cmd_to_read = (
-        Spunge::DB::Config->get_config('tmux_fqdn'),
-        split( /\s+/, Spunge::DB::Config->get_config('tmux_cmd_neww') ),
-        Spunge::DB::Config->get_config('tmux_cmd_neww_exec'),
+        Debug::Fork::Tmux::Config->get_config('tmux_fqdn'),
+        split(
+            /\s+/, Debug::Fork::Tmux::Config->get_config('tmux_cmd_neww')
+        ),
+        Debug::Fork::Tmux::Config->get_config('tmux_cmd_neww_exec'),
     );
 
     my $window_id = _read_from_cmd(@cmd_to_read);
@@ -88,8 +90,8 @@ sub _tmux_window_tty {
 
     # Concatenate the 'tmux' command and read its output
     my @cmd_to_read = (
-        Spunge::DB::Config->get_config('tmux_fqdn'),
-        split( /\s+/, Spunge::DB::Config->get_config('tmux_cmd_tty') ),
+        Debug::Fork::Tmux::Config->get_config('tmux_fqdn'),
+        split( /\s+/, Debug::Fork::Tmux::Config->get_config('tmux_cmd_tty') ),
         $window_id,
     );
     my @tmux_cmd = (@cmd_to_read);
@@ -122,9 +124,10 @@ sub _read_from_cmd {
     # If still a byte is readable then die as the file handle should be
     # closed already
     my $read_rv = read $cmd_output_fh => my $buf, 1;
-    _croak_on_cmd( @cmd_and_args, "failed reading command: $!" )
+    _croak_on_cmd( @cmd_and_args, "failed reading command: $!/$buf" )
         unless defined $read_rv;
-    _croak_on_cmd( @cmd_and_args, "did not finish" ) unless 0 == $read_rv;
+    _croak_on_cmd( @cmd_and_args, "did not finish: $buf" )
+        unless 0 == $read_rv;
 
     # Die on empty output
     chomp $cmd_out;
@@ -184,13 +187,21 @@ __END__
 
 =head1 SYNOPSIS
 
-As a helper for the debugger, the module should be used this way:
+    #!/usr/bin/perl -d
+    #
+    # ABSTRACT: Debug the fork()-contained code in this file
+    #
+    # Make fork()s debuggable with Tmux
+    use Debug::Fork::Tmux;
 
-    perl -MSpunge::DB -d your_script.pl
-
-You should run it from inside the C<tmux> window manager.
+    # See what happens in your debugger then...
+    fork;
 
 =head1 DESCRIPTION
+
+The real usage example of this module is:
+
+    perl -MDebug::Fork::Tmux -d your_script.pl
 
 The Perl's standard debugger requires additional stuff when the debugged
 Perl program use the L<fork()|perlfunc/fork> built-in.
@@ -225,6 +236,7 @@ a software capable to run on a server machine without as much dependencies
 as an C<xterm>. This module is a try to pick the L<Tmux|http://tmux.sf.net>
 windows manager for such a task.
 
+
 =head1 SUBROUTINES/METHODS
 
 All of the following are functions:
@@ -254,7 +266,7 @@ a given window id/number typically from L</_tmux_new_window()>.
 =sub C<_read_from_cmd( $cmd =E<gt> @args )>
 
 Takes the list containing the C<Str> L<system()|perlfunc/system> command and
-C<Array> its arguments and executes it. Reads Str the output and returns it.
+C<Array> its arguments and executes it. Reads C<Str> the output and returns it.
 Throws if no output or if the command failed.
 
 =sub C<_croak_on_cmd( $cmd =E<gt> @args, $happen )>
@@ -269,7 +281,7 @@ L<system()|perlfunc/system> command failure.
 
 =item The command ...
 
-Typically the error message starts with the command the L<Spunge::DB> tried
+Typically the error message starts with the command the L<Debug::Fork::Tmux> tried
 to execute, including the command's arguments.
 
 =item failed opening command: ...
@@ -366,31 +378,37 @@ Default :   C</usr/local/bin/tmux>
 
 The L<system()|perlfunc/system> arguments for a C<tmux>
 command for opening a new window and with output of a window address from
-C<tmux>. String is splitted by spaces to be a list of parameters.
+C<tmux>. String is sliced by spaces to be a list of parameters.
 
-Dafeult :  C<neww -P>
+Default :  C<neww -P>
 
 =head2 C<SPUNGE_TMUX_CMD_NEWW_EXEC>
 
 The L<system()|perlfunc/system> or a shell command to be given to the
 C<SPUNGE_TMUX_CMD_NEWW> command to be executed in a brand new created
-wiondow. It should wait unexpectedly and do nothing till the debugger
+window. It should wait unexpectedly and do nothing till the debugger
 catches the device and puts in into the proper use.
 
-Dafeult :  C<sleep 1000000>
+Default :  C<sleep 1000000>
 
 =head2 C<SPUNGE_TMUX_CMD_TTY>
 
 Command- line  parameter(s) for a  C<tmux> command to find a C<tty> name in
-the output. The string is splitted then by spaces. The C<tmux>'s window
+the output. The string is sliced then by spaces. The C<tmux>'s window
 address is added then as the very last argument.
 
-Dafeult :  C<lsp -F #{pane_tty} -t>
+Default :  C<lsp -F #{pane_tty} -t>
 
 =head1 WEB SITE
 
 The web site of
-L<Spunge::DB|http://gitweb.vereshagin.org/Spunge-DB/README.html> currently
+L<Debug::Fork::Tmux|http://gitweb.vereshagin.org/Debug-Fork-Tmux/README.html> currently
 consists of only one page cause it's a very small module.
+
+=begin stopwords
+
+Tmux LICENCE MERCHANTABILITY PerlMonks Tmux
+
+=end stopwords
 
 =cut

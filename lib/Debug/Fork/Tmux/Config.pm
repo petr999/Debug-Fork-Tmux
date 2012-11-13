@@ -1,12 +1,12 @@
-# ABSTRACT: Configuration system for Spunge::DB
-package Spunge::DB::Config;
-
-# VERSION
+# ABSTRACT: Configuration system for Debug::Fork::Tmux
+package Debug::Fork::Tmux::Config;
 
 # Helps you to behave
 use strict;
 use warnings;
 
+# VERSION
+#
 ### MODULES ###
 #
 # Glues up path components
@@ -100,18 +100,11 @@ __END__
 
 =pod
 
-=head1 OVERVIEW
-
-Most of the things are explained in L<Spunge::DB|Spunge::DB/CONFIGURATION
-AND ENVIRONMENT>.
-
 =head1 SYNOPSIS
 
-To read the configuration L<Spunge::DB> can do this:
+    use Debug::Fork::Tmux;
 
-    use Spunge::DB;
-
-    my $tmux_fqdn = Spunge::DB->config( 'tmux_fqdn' );
+    my $tmux_fqdn = Debug::Fork::Tmux->config( 'tmux_fqdn' );
 
 =head1 DESCRIPTION
 
@@ -127,14 +120,14 @@ All of the following are static methods:
 
 =pubsub C<get_config( Str the name of the option )>
 
-Retrieves configuration stored in an internal C<Spunge::DB::Config>
+Retrieves configuration stored in an internal C<Debug::Fork::Tmux::Config>
 constants.
 
-Returns Str value of the configuration parameter.
+Returns C<Str> value of the configuration parameter.
 
 =sub C<get_all_config_keys()>
 
-Returns Array[Str] names of all the configuration parameters.
+Returns C<Array[Str]> names of all the configuration parameters.
 
 =cut
 
@@ -150,7 +143,7 @@ Dies if no key asked was found in the configuration.
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
-See L<Spunge::DB/CONFIGURATION AND ENVIRONMENT>.
+See L<Debug::Fork::Tmux/CONFIGURATION AND ENVIRONMENT>.
 
 =cut
 

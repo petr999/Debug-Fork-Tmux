@@ -20,7 +20,7 @@ use Test::Most qw/bail/;    # BAIL_OUT() on any failure
 use Const::Fast;
 
 # Keys to get configuration for
-# Should be sync'ed with Spunge::DB::Config->get_all_config_keys
+# Should be sync'ed with Debug::Fork::Tmux::Config->get_all_config_keys
 const my @CONF_KEYS =>
     qw/tmux_fqdn tmux_cmd_neww_exec tmux_cmd_neww tmux_cmd_tty/;
 
@@ -41,31 +41,34 @@ while ( my ( $key => $value ) = each %CONF_PAIRS ) {
 const %ENV_VARS => %ENV_VARS;
 
 ### MAIN ###
-# Require   :   Test::Most, Spunge::DB::Config
+# Require   :   Test::Most, Debug::Fork::Tmux::Config
 #
 # Set up environment, localize it first
 # Depends   :   On %ENV global of main::, %ENV_VARS package lexical
 # Changes   :   %ENV localized global of main::
 local %ENV = %ENV_VARS;
+
 # keep from change the system environment
 
 # Loads main app module
-use_ok('Spunge::DB::Config');    # Environment variables set up clean
+use_ok('Debug::Fork::Tmux::Config');    # Environment variables set up clean
 
 # Check if config keys are in sync
-my @all_config_keys = Spunge::DB::Config->get_all_config_keys;
-cmp_bag( \@all_config_keys => \@CONF_KEYS,
-    'This test keeps config keys in sync' );
+my @all_config_keys = Debug::Fork::Tmux::Config->get_all_config_keys;
+cmp_bag(
+    \@all_config_keys => \@CONF_KEYS,
+    'This test keeps config keys in sync'
+);
 
 while ( my ( $key => $value ) = each %CONF_PAIRS ) {
-    ok( $value = Spunge::DB::Config->get_config($key) =>
+    ok( $value = Debug::Fork::Tmux::Config->get_config($key) =>
             "Get config for '$key'" );
     is( ref($value) => '', "Value for '$key' is a scalar" );
     ok( length($value) => "Value for '$key' is non-empty" );
     is( ref($value) => '', "Value for '$key' is a scalar" );
 
     # Compare ->get_config() result with %ENV element
-    is( $value => $CONF_PAIRS{ $key },
+    is( $value => $CONF_PAIRS{$key},
         "Value for '$key' from config is as expected from %ENV",
     );
 }

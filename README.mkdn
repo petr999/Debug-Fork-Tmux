@@ -1,21 +1,28 @@
 # NAME
 
-Spunge::DB - Makes fork() in debugger to open a new Tmux window
+Debug::Fork::Tmux - Makes fork() in debugger to open a new Tmux window
 
 # VERSION
 
-This documentation refers to the module contained in the distribution
-[Spunge-DB](http://search.cpan.org/perldoc?Spunge-DB) version 0.1.0.
+This documentation refers to the module contained in the distribution `Debug-Fork-Tmux` version 1.000000.
 
 # SYNOPSIS
 
-As a helper for the debugger, the module should be used this way:
+    #!/usr/bin/perl -d
+    #
+    # ABSTRACT: Debug the fork()-contained code in this file
+    #
+    # Make fork()s debuggable with Tmux
+    use Debug::Fork::Tmux;
 
-    perl -MSpunge::DB -d your_script.pl
-
-You should run it from inside the `tmux` window manager.
+    # See what happens in your debugger then...
+    fork;
 
 # DESCRIPTION
+
+The real usage example of this module is:
+
+    perl -MDebug::Fork::Tmux -d your_script.pl
 
 The Perl's standard debugger requires additional stuff when the debugged
 Perl program use the [fork()](http://search.cpan.org/perldoc?perlfunc#fork) built-in.
@@ -55,7 +62,7 @@ All of the following are functions:
 
 ## PUBLIC
 
-### `DB::get_fork_TTY()`
+### `DB::get\_fork\_TTY()`
 
 Finds new `TTY` for the `fork()`ed process.
 
@@ -66,26 +73,26 @@ Sets the `$DB::fork_TTY` to the same `Str` value.
 
 ## PRIVATE
 
-### `_spawn_tty()`
+### `\_spawn\_tty()`
 
 Creates a `TTY` device and returns `Str` its name.
 
-### `_tmux_new_window()`
+### `\_tmux\_new\_window()`
 
 Creates a given `tmux` window and returns `Str` its id/number.
 
-### `_tmux_window_tty( $window_id )`
+### `\_tmux\_window\_tty( $window\_id )`
 
 Finds a given `tmux` window's tty name and returns its `Str` name based on
 a given window id/number typically from ["\_tmux\_new\_window()"](#\_tmux\_new\_window()).
 
-### `_read_from_cmd( $cmd => @args )`
+### `\_read\_from\_cmd( $cmd => @args )`
 
 Takes the list containing the `Str` [system()](http://search.cpan.org/perldoc?perlfunc#system) command and
-`Array` its arguments and executes it. Reads Str the output and returns it.
+`Array` its arguments and executes it. Reads `Str` the output and returns it.
 Throws if no output or if the command failed.
 
-### `_croak_on_cmd( $cmd => @args, $happen )`
+### `\_croak\_on\_cmd( $cmd => @args, $happen )`
 
 Takes the `Str` command, `Array` its arguments and `Str` the reason of
 its failure, examines the `$?` and dies with explanation on the
@@ -99,73 +106,73 @@ console to be present in the system.
 Configuration is made via environment variables, the default is taken for
 each of them with no such variable is set in the environment:
 
-## `SPUNGE_TMUX_FQDN`
+## `SPUNGE\_TMUX\_FQDN`
 
 The `tmux` binary name with the full path.
 
 Default :   `/usr/local/bin/tmux`
 
-## `SPUNGE_TMUX_CMD_NEWW`
+## `SPUNGE\_TMUX\_CMD\_NEWW`
 
 The [system()](http://search.cpan.org/perldoc?perlfunc#system) arguments for a `tmux`
 command for opening a new window and with output of a window address from
-`tmux`. String is splitted by spaces to be a list of parameters.
+`tmux`. String is sliced by spaces to be a list of parameters.
 
-Dafeult :  `neww -P`
+Default :  `neww -P`
 
-## `SPUNGE_TMUX_CMD_NEWW_EXEC`
+## `SPUNGE\_TMUX\_CMD\_NEWW\_EXEC`
 
 The [system()](http://search.cpan.org/perldoc?perlfunc#system) or a shell command to be given to the
 `SPUNGE_TMUX_CMD_NEWW` command to be executed in a brand new created
-wiondow. It should wait unexpectedly and do nothing till the debugger
+window. It should wait unexpectedly and do nothing till the debugger
 catches the device and puts in into the proper use.
 
-Dafeult :  `sleep 1000000`
+Default :  `sleep 1000000`
 
-## `SPUNGE_TMUX_CMD_TTY`
+## `SPUNGE\_TMUX\_CMD\_TTY`
 
 Command- line  parameter(s) for a  `tmux` command to find a `tty` name in
-the output. The string is splitted then by spaces. The `tmux`'s window
+the output. The string is sliced then by spaces. The `tmux`'s window
 address is added then as the very last argument.
 
-Dafeult :  `lsp -F #{pane_tty} -t`
+Default :  `lsp -F #{pane_tty} -t`
 
 # DIAGNOSTICS
 
 - The command ...
 
-Typically the error message starts with the command the [Spunge::DB](http://search.cpan.org/perldoc?Spunge::DB) tried
-to execute, including the command's arguments.
+    Typically the error message starts with the command the [Debug::Fork::Tmux](http://search.cpan.org/perldoc?Debug::Fork::Tmux) tried
+    to execute, including the command's arguments.
 
 - failed opening command: ...
 
-The command was not taken by the system as an executable binary file.
+    The command was not taken by the system as an executable binary file.
 
 - ... didn't write a line
 - failed reading command: ...
 
-Command did not output exactly one line of the text.
+    Command did not output exactly one line of the text.
 
 - ... did not finish
 
-Command outputs more than one line of the text.
+    Command outputs more than one line of the text.
 
 - provided empty string
 
-Command outputs exactly one line of the text and the line is empty.
+    Command outputs exactly one line of the text and the line is empty.
 
 - failed to execute: ...
 
-There was failure executing the command
+    There was failure executing the command
 
 - child died with(out) signal X, Y coredump
 
-Command was killed by the signal X and the coredump is (not) located in Y.
+    Command was killed by the signal X and the coredump is (not) located in Y.
 
 - child exited with value X
 
-Command was not failed but there are reasons to throw an error like the
-wrong command's output.
+    Command was not failed but there are reasons to throw an error like the
+    wrong command's output.
 
 # DEPENDENCIES
 
@@ -212,12 +219,12 @@ distribution/repository.
 # BUGS AND LIMITATIONS
 
 You can make new bug reports, and view existing ones, through the
-web interface at [http://bugs.vereshagin.org/product/Spunge-DB](http://bugs.vereshagin.org/product/Spunge-DB).
+web interface at [http://bugs.vereshagin.org/product/Debug-Fork-Tmux](http://bugs.vereshagin.org/product/Debug-Fork-Tmux).
 
 # WEB SITE
 
 The web site of
-[Spunge::DB](http://gitweb.vereshagin.org/Spunge-DB/README.html) currently
+[Debug::Fork::Tmux](http://gitweb.vereshagin.org/Debug-Fork-Tmux/README.html) currently
 consists of only one page cause it's a very small module.
 
 # SUPPORT
@@ -226,32 +233,27 @@ consists of only one page cause it's a very small module.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc Spunge::DB
+    perldoc Debug::Fork::Tmux
 
 ## Email
 
-You can email the author of this module at `peter@vereshagin.org` asking
-for help with any problems you have.
+You can email the author of this module at `peter@vereshagin.org` asking for help with any problems you have.
 
 ## Bugs / Feature Requests
 
-Please report any bugs or feature requests by email to
-`peter@vereshagin.org`, or through
-the web interface at [http://bugs.vereshagin.org/product/Spunge-DB](http://bugs.vereshagin.org/product/Spunge-DB). You
-will be automatically notified of any
+Please report any bugs or feature requests by email to `peter@vereshagin.org`, or through
+the web interface at [http://bugs.vereshagin.org/product/Debug-Fork-Tmux](http://bugs.vereshagin.org/product/Debug-Fork-Tmux). You will be automatically notified of any
 progress on the request by the system.
 
 ## Source Code
 
-The code is open to the world, and available for you to hack on. Please
-feel free to browse it and play
-with it, or whatever. If you want to contribute patches, please send me a
-diff or prod me to pull
+The code is open to the world, and available for you to hack on. Please feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
 from your repository :)
 
-[http://gitweb.vereshagin.org/Spunge-DB](http://gitweb.vereshagin.org/Spunge-DB)
+[http://gitweb.vereshagin.org/Debug-Fork-Tmux](http://gitweb.vereshagin.org/Debug-Fork-Tmux)
 
-    git clone https://github.com/petr999/Spunge-DB.git
+    git clone https://github.com/petr999/Debug-Fork-Tmux.git
 
 # AUTHOR
 
@@ -264,6 +266,13 @@ This software is Copyright (c) 2012 by Peter Vereshagin.
 This is free software, licensed under:
 
     The (three-clause) BSD License
+
+# SEE ALSO
+
+Please see those modules/websites for more information related to this module.
+
+- [Debug::Fork::Tmux::Config](http://search.cpan.org/perldoc?Debug::Fork::Tmux::Config)
+- [http://perlmonks.org/?node\_id=128283](http://perlmonks.org/?node\_id=128283)
 
 # DISCLAIMER OF WARRANTY
 

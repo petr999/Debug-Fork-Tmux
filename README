@@ -3,7 +3,7 @@ NAME
 
 VERSION
     This documentation refers to the module contained in the distribution
-    "Debug-Fork-Tmux" version 1.000001.
+    "Debug-Fork-Tmux" version 1.000002.
 
 SYNOPSIS
         #!/usr/bin/perl -d

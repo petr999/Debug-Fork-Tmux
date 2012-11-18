@@ -4,7 +4,7 @@ Debug::Fork::Tmux - Makes fork() in debugger to open a new Tmux window
 
 # VERSION
 
-This documentation refers to the module contained in the distribution `Debug-Fork-Tmux` version 1.000001.
+This documentation refers to the module contained in the distribution `Debug-Fork-Tmux` version 1.000002.
 
 # SYNOPSIS
 
@@ -62,7 +62,7 @@ All of the following are functions:
 
 ## PUBLIC
 
-### `DB::get\_fork\_TTY()`
+### `DB::get_fork_TTY()`
 
 Finds new `TTY` for the `fork()`ed process.
 
@@ -73,26 +73,26 @@ Sets the `$DB::fork_TTY` to the same `Str` value.
 
 ## PRIVATE
 
-### `\_spawn\_tty()`
+### `_spawn_tty()`
 
 Creates a `TTY` device and returns `Str` its name.
 
-### `\_tmux\_new\_window()`
+### `_tmux_new_window()`
 
 Creates a given `tmux` window and returns `Str` its id/number.
 
-### `\_tmux\_window\_tty( $window\_id )`
+### `_tmux_window_tty( $window_id )`
 
 Finds a given `tmux` window's tty name and returns its `Str` name based on
 a given window id/number typically from ["\_tmux\_new\_window()"](#\_tmux\_new\_window()).
 
-### `\_read\_from\_cmd( $cmd => @args )`
+### `_read_from_cmd( $cmd => @args )`
 
 Takes the list containing the `Str` [system()](http://search.cpan.org/perldoc?perlfunc#system) command and
 `Array` its arguments and executes it. Reads `Str` the output and returns it.
 Throws if no output or if the command failed.
 
-### `\_croak\_on\_cmd( $cmd => @args, $happen )`
+### `_croak_on_cmd( $cmd => @args, $happen )`
 
 Takes the `Str` command, `Array` its arguments and `Str` the reason of
 its failure, examines the `$?` and dies with explanation on the
@@ -106,13 +106,13 @@ console to be present in the system.
 Configuration is made via environment variables, the default is taken for
 each of them with no such variable is set in the environment:
 
-## `SPUNGE\_TMUX\_FQDN`
+## `SPUNGE_TMUX_FQDN`
 
 The `tmux` binary name with the full path.
 
 Default :   `/usr/local/bin/tmux`
 
-## `SPUNGE\_TMUX\_CMD\_NEWW`
+## `SPUNGE_TMUX_CMD_NEWW`
 
 The [system()](http://search.cpan.org/perldoc?perlfunc#system) arguments for a `tmux`
 command for opening a new window and with output of a window address from
@@ -120,7 +120,7 @@ command for opening a new window and with output of a window address from
 
 Default :  `neww -P`
 
-## `SPUNGE\_TMUX\_CMD\_NEWW\_EXEC`
+## `SPUNGE_TMUX_CMD_NEWW_EXEC`
 
 The [system()](http://search.cpan.org/perldoc?perlfunc#system) or a shell command to be given to the
 `SPUNGE_TMUX_CMD_NEWW` command to be executed in a brand new created
@@ -129,7 +129,7 @@ catches the device and puts in into the proper use.
 
 Default :  `sleep 1000000`
 
-## `SPUNGE\_TMUX\_CMD\_TTY`
+## `SPUNGE_TMUX_CMD_TTY`
 
 Command- line  parameter(s) for a  `tmux` command to find a `tty` name in
 the output. The string is sliced then by spaces. The `tmux`'s window

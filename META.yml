@@ -37,4 +37,4 @@ requires:
 resources:
   bugtracker: http://bugs.vereshagin.org/product/Debug-Fork-Tmux
   repository: https://github.com/petr999/Debug-Fork-Tmux.git
-version: 1.000004
+version: 1.000005

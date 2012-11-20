@@ -21,6 +21,7 @@ t/15-config.t
 t/16-config_env.t
 t/20-cmd.t
 t/30-tmux.t
+xt/author/10-mkdn-no-backslashes.t
 xt/author/30-fixme.t
 xt/author/30-nobreakpoints.t
 xt/author/50-complexity.t

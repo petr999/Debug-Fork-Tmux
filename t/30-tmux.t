@@ -59,8 +59,7 @@ const my $TMUX_TTY_RGX =>
 sub skip_all_unless_ok {
     my ( $rv => $descr ) = @_;
 
-    if ($rv) { ok( $rv => $descr ) }
-    else     { plan( 'skip_all' => "Not $descr", ) }
+    plan( 'skip_all' => "Not $descr", ) unless $rv;
 
 }
 

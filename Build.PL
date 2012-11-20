@@ -18,6 +18,7 @@ my %module_build_args = (
     "Test::More" => "0.94",
     "Test::Most" => 0,
     "Test::Strict" => 0,
+    "Test::Version" => 0,
     "autodie" => 0,
     "perl" => "5.004"
   },
@@ -29,7 +30,7 @@ my %module_build_args = (
     "L<Peter Vereshagin|http://vereshagin.org> <peter\@vereshagin.org>"
   ],
   "dist_name" => "Debug-Fork-Tmux",
-  "dist_version" => "1.000002",
+  "dist_version" => "1.000004",
   "license" => "bsd",
   "module_name" => "Debug::Fork::Tmux",
   "recommends" => {},

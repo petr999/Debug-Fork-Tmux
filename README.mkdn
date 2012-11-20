@@ -4,7 +4,7 @@ Debug::Fork::Tmux - Makes fork() in debugger to open a new Tmux window
 
 # VERSION
 
-This documentation refers to the module contained in the distribution `Debug-Fork-Tmux` version 1.000002.
+This documentation refers to the module contained in the distribution `Debug-Fork-Tmux` version 1.000004.
 
 # SYNOPSIS
 

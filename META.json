@@ -55,6 +55,7 @@
             "Test::More" : "0.94",
             "Test::Most" : "0",
             "Test::Strict" : "0",
+            "Test::Version" : "0",
             "autodie" : "0",
             "perl" : "5.004"
          }
@@ -72,6 +73,6 @@
          "web" : "http://gitweb.vereshagin.org/Debug-Fork-Tmux"
       }
    },
-   "version" : "1.000002"
+   "version" : "1.000004"
 }
 

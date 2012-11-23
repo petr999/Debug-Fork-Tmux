@@ -405,6 +405,9 @@ The web site of
 L<Debug::Fork::Tmux|http://gitweb.vereshagin.org/Debug-Fork-Tmux/README.html> currently
 consists of only one page cause it's a very small module.
 
+You may want to visit a L<GitHub
+page|https://github.com/petr999/Debug-Fork-Tmux>, too.
+
 =begin stopwords
 
 Tmux LICENCE MERCHANTABILITY PerlMonks Tmux

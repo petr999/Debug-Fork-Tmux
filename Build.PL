@@ -11,6 +11,7 @@ my %module_build_args = (
     "File::Find" => 0,
     "File::Temp" => 0,
     "Module::Build" => "0.3601",
+    "Perl6::Slurp" => 0,
     "Scalar::Util" => 0,
     "Sort::Versions" => 0,
     "Sub::Name" => 0,
@@ -30,7 +31,7 @@ my %module_build_args = (
     "L<Peter Vereshagin|http://vereshagin.org> <peter\@vereshagin.org>"
   ],
   "dist_name" => "Debug-Fork-Tmux",
-  "dist_version" => "1.000006",
+  "dist_version" => "1.000007",
   "license" => "bsd",
   "module_name" => "Debug::Fork::Tmux",
   "recommends" => {},

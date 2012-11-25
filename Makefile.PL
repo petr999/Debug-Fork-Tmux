@@ -16,6 +16,7 @@ my %WriteMakefileArgs = (
     "File::Find" => 0,
     "File::Temp" => 0,
     "Module::Build" => "0.3601",
+    "Perl6::Slurp" => 0,
     "Scalar::Util" => 0,
     "Sort::Versions" => 0,
     "Sub::Name" => 0,
@@ -41,7 +42,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "1.000006",
+  "VERSION" => "1.000007",
   "test" => {
     "TESTS" => "t/*.t"
   }

@@ -45,7 +45,7 @@ const my $EMPTY_COMMAND_MSG => 'Trial of croak_on_cmd';
 # Empty command result regex
 # Depends   :   On $EMPTY_COMMAND, $EMPTY_COMMAND_RGX package lexicals
 my $EMPTY_COMMAND_RGX = join ' ', "The command", $EMPTY_COMMAND,
-    $EMPTY_COMMAND_MSG, "child exited with value 0 at $0 line \\d+\\.\$";
+    $EMPTY_COMMAND_MSG, "child exited with value 0 at $0 line \\d+\\.?\$";
 const $EMPTY_COMMAND_RGX => qr/$EMPTY_COMMAND_RGX/;
 
 # Single line to print in a one-liner
@@ -64,21 +64,21 @@ my $ONE_LINER_DOUBLE_LINE_RGX = join ' ', '^The command', @PERL_RUN_COMMON,
 # For one-liner to match 'perl -e "\n"'
 $ONE_LINER_DOUBLE_LINE_RGX =~ s/\\/\\\\/g;
 $ONE_LINER_DOUBLE_LINE_RGX = join ' ', $ONE_LINER_DOUBLE_LINE_RGX,
-    'did not finish: .* child exited with value 0 at', $0, 'line \d+\.$';
+    'did not finish: .* child exited with value 0 at', $0, 'line \d+\.?$';
 const $ONE_LINER_DOUBLE_LINE_RGX => qr/$ONE_LINER_DOUBLE_LINE_RGX/;
 
 # Emptyness print command result regex
 # Depends   :   On $EMPTY_COMMAND, $EMPTY_COMMAND_RGX, @PERL_RUN_COMMON package lexicals
 my $EMPTYNESS_COMMAND_RGX = join ' ', "The command", @PERL_RUN_COMMON,
     ';', "didn't write a line",
-    "child exited with value 0 at $0 line \\d+\\.\$";
+    "child exited with value 0 at $0 line \\d+\\.?\$";
 const $EMPTYNESS_COMMAND_RGX => qr/$EMPTYNESS_COMMAND_RGX/;
 
 # Emptyness print command result regex
 # Depends   :   On $EMPTY_COMMAND, $EMPTY_COMMAND_RGX, @PERL_RUN_COMMON package lexicals
 my $EMPTY_STR_COMMAND_RGX = join ' ', "The command", @PERL_RUN_COMMON,
     'print "\\n";', "provided empty string",
-    "child exited with value 0 at $0 line \\d+\\.\$";
+    "child exited with value 0 at $0 line \\d+\\.?\$";
 const $EMPTY_STR_COMMAND_RGX => qr/$EMPTYNESS_COMMAND_RGX/;
 
 ### SUBS ###

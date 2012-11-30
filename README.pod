@@ -6,7 +6,7 @@ Debug::Fork::Tmux - Makes fork() in debugger to open a new Tmux window
 
 =head1 VERSION
 
-This documentation refers to the module contained in the distribution C<Debug-Fork-Tmux> version 1.000008.
+This documentation refers to the module contained in the distribution C<Debug-Fork-Tmux> version 1.000009.
 
 =head1 SYNOPSIS
 
@@ -44,7 +44,7 @@ this:
   by typing tty, and disconnect the shell from TTY by sleep 1000000.
 
 All of that is about getting the pseudo-terminal device for another part of
-user interface. This is probably why only the C<GUI>s are mentioned here: 
+user interface. This is probably why only the C<GUI>s are mentioned here:
 C<OS/2> 'Command Prompt', C<Mac OS X>'s C<Terminal.app> and an C<xterm>. For
 those of you who develop server-side stuff it should be known that keeping
 C<GUI> on the server is far from always to be available as an option no

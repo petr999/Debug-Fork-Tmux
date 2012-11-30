@@ -237,7 +237,7 @@
     </h1>
     <p>
       This documentation refers to the module contained in the distribution
-      <code>Debug-Fork-Tmux</code> version 1.000007.
+      <code>Debug-Fork-Tmux</code> version 1.000008.
     </p>
     <h1>
       <a class='u' href='#___top' title='click to go to top of document'
@@ -262,16 +262,17 @@
       The real usage example of this module is:
     </p>
     <pre>
-    perl -MDebug::Fork::Tmux -d your_script.pl
+    $ perl -MDebug::Fork::Tmux -d your_script.pl
 </pre>
     <p>
-      The Perl's standard debugger requires additional stuff when the
-      debugged Perl program use the <a href=
+      As Perl's standard debugger requires additional code to be written
+      and used when the debugged Perl program use the <a href=
       "http://search.cpan.org/perldoc?perlfunc#fork" class=
       "podlinkpod">fork()</a> built-in.
     </p>
     <p>
-      This module is about to solve the trouble which visible like this:
+      This module is about to solve the trouble which is used to be
+      observed like this:
     </p>
     <pre>
   ######### Forked, but do not know how to create a new TTY. #########
@@ -286,18 +287,23 @@
   by typing tty, and disconnect the shell from TTY by sleep 1000000.
 </pre>
     <p>
-      <code>OS/2</code> is a fun for me but in the past. <code>Mac OS
-      X</code> is a more chance but still isn't real. And for
-      <code>xterm</code> ... who wants to keep it on your server? Gimme
-      some stones to throw on that one.
+      All of that is about getting the pseudo-terminal device for another
+      part of user interface. This is probably why only the
+      <code>GUI</code>s are mentioned here: <code>OS/2</code> 'Command
+      Prompt', <code>Mac OS X</code>'s <code>Terminal.app</code> and an
+      <code>xterm</code>. For those of you who develop server-side stuff it
+      should be known that keeping <code>GUI</code> on the server is far
+      from always to be available as an option no matter if it's a
+      production or a development environment.
     </p>
     <p>
-      But the pseudo-terminal device isn't much about <code>GUI</code>s by
-      its nature so the problem behind the bars of the <a href=
-      "http://search.cpan.org/perldoc?perl5db.pl" class=
-      "podlinkpod">perl5db.pl</a> report ( see more detailed problem
+      The most ridiculous for every <code>TUI</code> (the <code>ssh</code>
+      particularly) user is that the pseudo-terminal device isn't that much
+      about <code>GUI</code>s by its nature so the problem behind the bars
+      of the <a href="http://search.cpan.org/perldoc?perl5db.pl" class=
+      "podlinkpod">perl5db.pl</a> report (see more detailed problem
       description at the <a href="http://perlmonks.org/?node_id=128283"
-      class="podlinkurl">PerlMonks thread</a> ) is the consoles management.
+      class="podlinkurl">PerlMonks thread</a>) is the consoles management.
       It's a kind of a tricky, for example, to start the next
       <code>ssh</code> session initiated from the machine serving as an
       <code>sshd</code> server for the existing session.
@@ -308,6 +314,16 @@
       dependencies as an <code>xterm</code>. This module is a try to pick
       the <a href="http://tmux.sf.net" class="podlinkurl">Tmux</a> windows
       manager for such a task.
+    </p>
+    <p>
+      Because of highly-developed scripting capabilities of
+      <code>Tmux</code> any user can supply the 'window' or a 'pane' to
+      Perl's debugger making it suitable to debug the separate process in a
+      different <code>UI</code> instance. Also this adds the features like
+      <code>groupware</code>: imagine that your mate can debug the process
+      you've just <code>fork()ed</code> by mean of attaching the same
+      <code>tmux</code> you are running on a server. While you keep working
+      on a process that called a <code>fork()</code>.
     </p>
     <h1>
       <a class='u' href='#___top' title='click to go to top of document'

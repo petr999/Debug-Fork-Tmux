@@ -31,7 +31,7 @@ my %module_build_args = (
     "L<Peter Vereshagin|http://vereshagin.org> <peter\@vereshagin.org>"
   ],
   "dist_name" => "Debug-Fork-Tmux",
-  "dist_version" => "1.000007",
+  "dist_version" => "1.000008",
   "license" => "bsd",
   "module_name" => "Debug::Fork::Tmux",
   "recommends" => {},

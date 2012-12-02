@@ -30,11 +30,11 @@ use Const::Fast;
 
 # Fully qualified file name of the perl binary
 # Requires  :   Config
-const my $PERL_BIN_FQDN => $Config{'perlpath'};
+const my $PERL_BIN_FQFN => $Config{'perlpath'};
 
 # All of the command line parameters comman for every perl command run
-# Depends   :   On PERL_BIN_FQDN package lexical
-const my @PERL_RUN_COMMON => ( $PERL_BIN_FQDN, '-Mstrict', '-we' );
+# Depends   :   On PERL_BIN_FQFN package lexical
+const my @PERL_RUN_COMMON => ( $PERL_BIN_FQFN, '-Mstrict', '-we' );
 
 # Empty command to test croak()ing
 const my $EMPTY_COMMAND => 'There were no any command';

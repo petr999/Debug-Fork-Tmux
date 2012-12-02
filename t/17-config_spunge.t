@@ -44,37 +44,36 @@ const %ENV_VARS => %ENV_VARS;
 # Require   :   Test::Most, Debug::Fork::Tmux::Config
 #
 # Set up environment, localize it first
-# Test if DFTMUX_* variables do not warn
+# Test for deprecation warning also
 # Depends   :   On %ENV global of main::, %ENV_VARS package lexical
 # Changes   :   %ENV localized global of main::
 warning_is {
 
+    # Set environment variables
     # keep from change the system environment
-    local %ENV = %ENV_VARS;
+    my $key   = 'tmux_cmd_tty';
+    my $value = $CONF_PAIRS{$key};
+    local $ENV{ 'SPUNGE_' . uc $key } = $value;    # This generates warning
+
+    # does not generate warning
+    local $ENV{'DFTMUX_FQFN'} = $CONF_PAIRS{$key};
 
     # Loads main app module
     use_ok('Debug::Fork::Tmux::Config');  # Environment variables set up clean
 
-    # Check if config keys are in sync
-    my @all_config_keys = Debug::Fork::Tmux::Config->get_all_config_keys;
-    cmp_bag(
-        \@all_config_keys => \@CONF_KEYS,
-        'This test keeps config keys in sync'
+    # Test if SPUNGE_* variable works
+    ok( $value = Debug::Fork::Tmux::Config->get_config($key) =>
+            "Get config for '$key'" );
+    is( ref($value) => '', "Value for '$key' is a scalar" );
+    ok( length($value) => "Value for '$key' is non-empty" );
+
+    # Compare ->get_config() result with %ENV element
+    is( $value => $CONF_PAIRS{$key},
+        "Value for '$key' from config is as expected from %ENV",
     );
-
-    while ( my ( $key => $value ) = each %CONF_PAIRS ) {
-        ok( $value = Debug::Fork::Tmux::Config->get_config($key) =>
-                "Get config for '$key'" );
-        is( ref($value) => '', "Value for '$key' is a scalar" );
-        ok( length($value) => "Value for '$key' is non-empty" );
-
-        # Compare ->get_config() result with %ENV element
-        is( $value => $CONF_PAIRS{$key},
-            "Value for '$key' from config is as expected from %ENV",
-        );
-    }
 }
-undef, 'DFTMUX_* variables do not warn';
+'SPUNGE_TMUX_CMD_TTY is deprecated and will be unsupported',
+    'SPUNGE_* variable warns';
 
 # Continues till this point
 done_testing();

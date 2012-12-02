@@ -3,7 +3,7 @@ NAME
 
 VERSION
     This documentation refers to the module contained in the distribution
-    "Debug-Fork-Tmux" version 1.000009.
+    "Debug-Fork-Tmux" version 1.000010.
 
 SYNOPSIS
         #!/usr/bin/perl -d
@@ -108,32 +108,44 @@ CONFIGURATION AND ENVIRONMENT
     Configuration is made via environment variables, the default is taken
     for each of them with no such variable is set in the environment:
 
-  "SPUNGE_TMUX_FQDN"
+  "DFTMUX_FQFN"
     The "tmux" binary name with the full path.
 
-    Default : "/usr/local/bin/tmux"
+    Default : The first of those for executable to exist:
 
-  "SPUNGE_TMUX_CMD_NEWW"
+    "PATH" environment variable contents
+    Path to the Perl binary interpreter
+    Current directory
+
+    and just the "tmux" as a fallback if none of above is the location of
+    the "tmux" executable file.
+
+  "DFTMUX_CMD_NEWW"
     The system() arguments for a "tmux" command for opening a new window and
     with output of a window address from "tmux". String is sliced by spaces
     to be a list of parameters.
 
     Default : "neww -P"
 
-  "SPUNGE_TMUX_CMD_NEWW_EXEC"
-    The system() or a shell command to be given to the
-    "SPUNGE_TMUX_CMD_NEWW" command to be executed in a brand new created
-    window. It should wait unexpectedly and do nothing till the debugger
-    catches the device and puts in into the proper use.
+  "DFTMUX_CMD_NEWW_EXEC"
+    The system() or a shell command to be given to the "DFTMUX_CMD_NEWW"
+    command to be executed in a brand new created window. It should wait
+    unexpectedly and do nothing till the debugger catches the device and
+    puts in into the proper use.
 
     Default : "sleep 1000000"
 
-  "SPUNGE_TMUX_CMD_TTY"
+  "DFTMUX_CMD_TTY"
     Command- line parameter(s) for a "tmux" command to find a "tty" name in
     the output. The string is sliced then by spaces. The "tmux"'s window
     address is added then as the very last argument.
 
     Default : "lsp -F #{pane_tty} -t"
+
+  Earlier versions' "SPUNGE_*" environment variables
+    Till v1.000009 the module was controlled by the environment variables
+    like "SPUNGE_TMUX_FQDN". Those are deprecated and should be replaced in
+    your configuration(s) onto the "DFTMUX_"-prefixed ones.
 
 DIAGNOSTICS
     The command ...
@@ -167,25 +179,20 @@ DIAGNOSTICS
         the wrong command's output.
 
 DEPENDENCIES
-    * "Perl 5.6.0+" is available from The Perl website <http://www.perl.org>
+    * "Perl 5.8.9+" is available from The Perl website <http://www.perl.org>
 
-    * Config, Cwd, DB, ExtUtils::MakeMaker, File::Find, File::Spec are
-    available in core "Perl" distribution version 5.6.0 and later
+    * Config, Cwd, DB, ExtUtils::MakeMaker, File::Find, File::Spec,
+    File::Basename, Scalar::Util, Test::More are available in core "Perl"
+    distribution version 5.8.9 and later
 
     * Const::Fast is available from "CPAN"
 
     * Module::Build is available in core "Perl" distribution since version
     5.9.4
 
-    * Scalar::Util is available in core "Perl" distribution since version
-    5.7.3
-
     * Sort::Versions is available from "CPAN"
 
     * Test::Exception is available from "CPAN"
-
-    * Test::More is available in core "Perl" distribution since version
-    5.6.2
 
     * Test::Most is available from "CPAN"
 

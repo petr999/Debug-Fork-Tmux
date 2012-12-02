@@ -12,7 +12,6 @@ my %WriteMakefileArgs = (
   "ABSTRACT" => "Makes fork() in debugger to open a new Tmux window",
   "AUTHOR" => "L<Peter Vereshagin|http://vereshagin.org> <peter\@vereshagin.org>",
   "BUILD_REQUIRES" => {
-    "Config" => 0,
     "File::Find" => 0,
     "File::Temp" => 0,
     "Module::Build" => "0.3601",
@@ -36,13 +35,15 @@ my %WriteMakefileArgs = (
   "NAME" => "Debug::Fork::Tmux",
   "PREREQ_PM" => {
     "Carp" => 0,
+    "Config" => 0,
     "Const::Fast" => 0,
     "Cwd" => 0,
+    "File::Basename" => 0,
     "File::Spec" => 0,
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "1.000009",
+  "VERSION" => "1.000010",
   "test" => {
     "TESTS" => "t/*.t"
   }

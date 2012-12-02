@@ -4,7 +4,7 @@ Debug::Fork::Tmux - Makes fork() in debugger to open a new Tmux window
 
 # VERSION
 
-This documentation refers to the module contained in the distribution `Debug-Fork-Tmux` version 1.000009.
+This documentation refers to the module contained in the distribution `Debug-Fork-Tmux` version 1.000010.
 
 # SYNOPSIS
 
@@ -119,13 +119,20 @@ console to be present in the system.
 Configuration is made via environment variables, the default is taken for
 each of them with no such variable is set in the environment:
 
-## `SPUNGE_TMUX_FQDN`
+## `DFTMUX_FQFN`
 
 The `tmux` binary name with the full path.
 
-Default :   `/usr/local/bin/tmux`
+Default :   The first of those for executable to exist:
 
-## `SPUNGE_TMUX_CMD_NEWW`
+- `PATH` environment variable contents
+- Path to the Perl binary interpreter
+- Current directory
+
+and just the `tmux` as a fallback if none of above is the location of the
+`tmux` executable file.
+
+## `DFTMUX_CMD_NEWW`
 
 The [system()](http://search.cpan.org/perldoc?perlfunc#system) arguments for a `tmux`
 command for opening a new window and with output of a window address from
@@ -133,22 +140,28 @@ command for opening a new window and with output of a window address from
 
 Default :  `neww -P`
 
-## `SPUNGE_TMUX_CMD_NEWW_EXEC`
+## `DFTMUX_CMD_NEWW_EXEC`
 
 The [system()](http://search.cpan.org/perldoc?perlfunc#system) or a shell command to be given to the
-`SPUNGE_TMUX_CMD_NEWW` command to be executed in a brand new created
+`DFTMUX_CMD_NEWW` command to be executed in a brand new created
 window. It should wait unexpectedly and do nothing till the debugger
 catches the device and puts in into the proper use.
 
 Default :  `sleep 1000000`
 
-## `SPUNGE_TMUX_CMD_TTY`
+## `DFTMUX_CMD_TTY`
 
 Command- line  parameter(s) for a  `tmux` command to find a `tty` name in
 the output. The string is sliced then by spaces. The `tmux`'s window
 address is added then as the very last argument.
 
 Default :  `lsp -F #{pane_tty} -t`
+
+## Earlier versions' `SPUNGE_*` environment variables
+
+Till v1.000009 the module was controlled by the environment variables like
+`SPUNGE_TMUX_FQDN`. Those are deprecated and should be replaced in your
+configuration(s) onto the `DFTMUX_`\-prefixed ones.
 
 # DIAGNOSTICS
 
@@ -189,12 +202,12 @@ Default :  `lsp -F #{pane_tty} -t`
 
 # DEPENDENCIES
 
-\* `Perl 5.6.0+`
+\* `Perl 5.8.9+`
 is available from [The Perl website](http://www.perl.org)
 
 \* [Config](http://search.cpan.org/perldoc?Config), [Cwd](http://search.cpan.org/perldoc?Cwd), [DB](http://search.cpan.org/perldoc?DB), [ExtUtils::MakeMaker](http://search.cpan.org/perldoc?ExtUtils::MakeMaker), [File::Find](http://search.cpan.org/perldoc?File::Find),
-[File::Spec](http://search.cpan.org/perldoc?File::Spec) are available in core `Perl` distribution version 5.6.0 and
-later
+[File::Spec](http://search.cpan.org/perldoc?File::Spec), [File::Basename](http://search.cpan.org/perldoc?File::Basename), [Scalar::Util](http://search.cpan.org/perldoc?Scalar::Util), [Test::More](http://search.cpan.org/perldoc?Test::More) are
+available in core `Perl` distribution version 5.8.9 and later
 
 \* [Const::Fast](http://search.cpan.org/perldoc?Const::Fast)
 is available from `CPAN`
@@ -202,17 +215,11 @@ is available from `CPAN`
 \* [Module::Build](http://search.cpan.org/perldoc?Module::Build)
 is available in core `Perl` distribution since version 5.9.4
 
-\* [Scalar::Util](http://search.cpan.org/perldoc?Scalar::Util)
-is available in core `Perl` distribution since version 5.7.3
-
 \* [Sort::Versions](http://search.cpan.org/perldoc?Sort::Versions)
 is available from `CPAN`
 
 \* [Test::Exception](http://search.cpan.org/perldoc?Test::Exception)
 is available from `CPAN`
-
-\* [Test::More](http://search.cpan.org/perldoc?Test::More)
-is available in core `Perl` distribution since version 5.6.2
 
 \* [Test::Most](http://search.cpan.org/perldoc?Test::Most)
 is available from `CPAN`

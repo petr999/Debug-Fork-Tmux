@@ -201,7 +201,7 @@
     </h1>
     <p>
       This documentation refers to the module contained in the distribution
-      <code>Debug-Fork-Tmux</code> version 1.000009.
+      <code>Debug-Fork-Tmux</code> version 1.000010.
     </p>
     <h1>
       <a class='u' href='#___top' title='click to go to top of document'
@@ -210,7 +210,7 @@
     <pre>
     use Debug::Fork::Tmux;
 
-    my $tmux_fqdn = Debug::Fork::Tmux-&gt;config( 'tmux_fqdn' );
+    my $tmux_fqfn = Debug::Fork::Tmux-&gt;config( 'tmux_fqfn' );
 </pre>
     <h1>
       <a class='u' href='#___top' title='click to go to top of document'
@@ -221,8 +221,12 @@
       defaults if those are not set.
     </p>
     <p>
-      For example <code>tmux_fqdn</code> can be overridden with
-      <code>SPUNGE_TMUX_FQDN</code> variable, and so on..
+      For example <code>tmux_fqfn</code> can be overridden with
+      <code>DFTMUX_FQFN</code> variable, and so on.
+    </p>
+    <p>
+      The <code>SPUNGE_*</code> variables are supported yet but deprecated
+      and will be removed.
     </p>
     <h1>
       <a class='u' href='#___top' title='click to go to top of document'

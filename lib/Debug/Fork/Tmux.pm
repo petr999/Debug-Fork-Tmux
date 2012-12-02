@@ -63,12 +63,12 @@ sub _spawn_tty {
 # Function
 # Creates new 'tmux' window  and returns its id/number
 # Takes     :   n/a
-# Depends   :   On 'tmux_fqdn', 'tmux_neww', 'tmux_neww_exec' configuration
+# Depends   :   On 'tmux_fqfn', 'tmux_neww', 'tmux_neww_exec' configuration
 #               parameters
 # Returns   :   Str id/number of the created 'tmux' window
 sub _tmux_new_window {
     my @cmd_to_read = (
-        Debug::Fork::Tmux::Config->get_config('tmux_fqdn'),
+        Debug::Fork::Tmux::Config->get_config('tmux_fqfn'),
         split(
             /\s+/, Debug::Fork::Tmux::Config->get_config('tmux_cmd_neww')
         ),
@@ -83,14 +83,14 @@ sub _tmux_new_window {
 # Function
 # Gets a 'tty' name from 'tmux's window id/number
 # Takes     :   Str 'tmux' window id/number
-# Depends   :   On 'tmux_fqdn', 'tmux_cmd_tty' configuration parameters
+# Depends   :   On 'tmux_fqfn', 'tmux_cmd_tty' configuration parameters
 # Returns   :   Str 'tty' device name of the 'tmux' window
 sub _tmux_window_tty {
     my $window_id = shift;
 
     # Concatenate the 'tmux' command and read its output
     my @cmd_to_read = (
-        Debug::Fork::Tmux::Config->get_config('tmux_fqdn'),
+        Debug::Fork::Tmux::Config->get_config('tmux_fqfn'),
         split( /\s+/, Debug::Fork::Tmux::Config->get_config('tmux_cmd_tty') ),
         $window_id,
     );
@@ -332,12 +332,12 @@ wrong command's output.
 
 =head1 DEPENDENCIES
 
-* C<Perl 5.6.0+>
+* C<Perl 5.8.9+>
 is available from L<The Perl website|http://www.perl.org>
 
 * L<Config>, L<Cwd>, L<DB>, L<ExtUtils::MakeMaker>, L<File::Find>,
-L<File::Spec> are available in core C<Perl> distribution version 5.6.0 and
-later
+L<File::Spec>, L<File::Basename>, L<Scalar::Util>, L<Test::More> are
+available in core C<Perl> distribution version 5.8.9 and later
 
 * L<Const::Fast>
 is available from C<CPAN>
@@ -345,17 +345,11 @@ is available from C<CPAN>
 * L<Module::Build>
 is available in core C<Perl> distribution since version 5.9.4
 
-* L<Scalar::Util>
-is available in core C<Perl> distribution since version 5.7.3
-
 * L<Sort::Versions>
 is available from C<CPAN>
 
 * L<Test::Exception>
 is available from C<CPAN>
-
-* L<Test::More>
-is available in core C<Perl> distribution since version 5.6.2
 
 * L<Test::Most>
 is available from C<CPAN>
@@ -380,13 +374,26 @@ console to be present in the system.
 Configuration is made via environment variables, the default is taken for
 each of them with no such variable is set in the environment:
 
-=head2 C<SPUNGE_TMUX_FQDN>
+=head2 C<DFTMUX_FQFN>
 
 The C<tmux> binary name with the full path.
 
-Default :   C</usr/local/bin/tmux>
+Default :   The first of those for executable to exist:
 
-=head2 C<SPUNGE_TMUX_CMD_NEWW>
+=over
+
+=item C<PATH> environment variable contents
+
+=item Path to the Perl binary interpreter
+
+=item Current directory
+
+=back
+
+and just the C<tmux> as a fallback if none of above is the location of the
+C<tmux> executable file.
+
+=head2 C<DFTMUX_CMD_NEWW>
 
 The L<system()|perlfunc/system> arguments for a C<tmux>
 command for opening a new window and with output of a window address from
@@ -394,22 +401,28 @@ C<tmux>. String is sliced by spaces to be a list of parameters.
 
 Default :  C<neww -P>
 
-=head2 C<SPUNGE_TMUX_CMD_NEWW_EXEC>
+=head2 C<DFTMUX_CMD_NEWW_EXEC>
 
 The L<system()|perlfunc/system> or a shell command to be given to the
-C<SPUNGE_TMUX_CMD_NEWW> command to be executed in a brand new created
+C<DFTMUX_CMD_NEWW> command to be executed in a brand new created
 window. It should wait unexpectedly and do nothing till the debugger
 catches the device and puts in into the proper use.
 
 Default :  C<sleep 1000000>
 
-=head2 C<SPUNGE_TMUX_CMD_TTY>
+=head2 C<DFTMUX_CMD_TTY>
 
 Command- line  parameter(s) for a  C<tmux> command to find a C<tty> name in
 the output. The string is sliced then by spaces. The C<tmux>'s window
 address is added then as the very last argument.
 
 Default :  C<lsp -F #{pane_tty} -t>
+
+=head2 Earlier versions' C<SPUNGE_*> environment variables
+
+Till v1.000009 the module was controlled by the environment variables like
+C<SPUNGE_TMUX_FQDN>. Those are deprecated and should be replaced in your
+configuration(s) onto the C<DFTMUX_>-prefixed ones.
 
 =head1 WEB SITE
 

@@ -19,6 +19,7 @@ t/000-report-versions.t
 t/10-use.t
 t/15-config.t
 t/16-config_env.t
+t/17-config_spunge.t
 t/20-cmd.t
 t/30-tmux.t
 xt/author/10-mkdn-no-backslashes.t

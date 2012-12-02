@@ -83,17 +83,21 @@
           ENVIRONMENT</a>
           <ul class='indexList indexList2'>
             <li class='indexItem indexItem2'>
-              <a href='#SPUNGE_TMUX_FQDN'>SPUNGE_TMUX_FQDN</a>
+              <a href='#DFTMUX_FQFN'>DFTMUX_FQFN</a>
             </li>
             <li class='indexItem indexItem2'>
-              <a href='#SPUNGE_TMUX_CMD_NEWW'>SPUNGE_TMUX_CMD_NEWW</a>
+              <a href='#DFTMUX_CMD_NEWW'>DFTMUX_CMD_NEWW</a>
+            </li>
+            <li class='indexItem indexItem2'>
+              <a href='#DFTMUX_CMD_NEWW_EXEC'>DFTMUX_CMD_NEWW_EXEC</a>
+            </li>
+            <li class='indexItem indexItem2'>
+              <a href='#DFTMUX_CMD_TTY'>DFTMUX_CMD_TTY</a>
             </li>
             <li class='indexItem indexItem2'>
               <a href=
-              '#SPUNGE_TMUX_CMD_NEWW_EXEC'>SPUNGE_TMUX_CMD_NEWW_EXEC</a>
-            </li>
-            <li class='indexItem indexItem2'>
-              <a href='#SPUNGE_TMUX_CMD_TTY'>SPUNGE_TMUX_CMD_TTY</a>
+              '#Earlier_versions%27_SPUNGE_*_environment_variables'>Earlier
+              versions' SPUNGE_* environment variables</a>
             </li>
           </ul>
         </li>
@@ -150,7 +154,7 @@
     </h2>
     <p>
       This documentation refers to the module contained in the distribution
-      <code>Debug-Fork-Tmux</code> version 1.000009.
+      <code>Debug-Fork-Tmux</code> version 1.000010.
     </p>
     <h2>
       <a class='u' href='#___top' title='click to go to top of document'
@@ -337,19 +341,38 @@
     </p>
     <h3>
       <a class='u' href='#___top' title='click to go to top of document'
-      name="SPUNGE_TMUX_FQDN" id=
-      "SPUNGE_TMUX_FQDN"><code>SPUNGE_TMUX_FQDN</code></a>
+      name="DFTMUX_FQFN" id="DFTMUX_FQFN"><code>DFTMUX_FQFN</code></a>
     </h3>
     <p>
       The <code>tmux</code> binary name with the full path.
     </p>
     <p>
-      Default : <code>/usr/local/bin/tmux</code>
+      Default : The first of those for executable to exist:
+    </p>
+    <dl>
+      <dt>
+        <a name="PATH_environment_variable_contents" id=
+        "PATH_environment_variable_contents"><code>PATH</code> environment
+        variable contents</a>
+      </dt>
+      <dt>
+        <a name="Path_to_the_Perl_binary_interpreter" id=
+        "Path_to_the_Perl_binary_interpreter">Path to the Perl binary
+        interpreter</a>
+      </dt>
+      <dt>
+        <a name="Current_directory" id="Current_directory">Current
+        directory</a>
+      </dt>
+    </dl>
+    <p>
+      and just the <code>tmux</code> as a fallback if none of above is the
+      location of the <code>tmux</code> executable file.
     </p>
     <h3>
       <a class='u' href='#___top' title='click to go to top of document'
-      name="SPUNGE_TMUX_CMD_NEWW" id=
-      "SPUNGE_TMUX_CMD_NEWW"><code>SPUNGE_TMUX_CMD_NEWW</code></a>
+      name="DFTMUX_CMD_NEWW" id=
+      "DFTMUX_CMD_NEWW"><code>DFTMUX_CMD_NEWW</code></a>
     </h3>
     <p>
       The <a href="http://search.cpan.org/perldoc?perlfunc#system" class=
@@ -363,23 +386,23 @@
     </p>
     <h3>
       <a class='u' href='#___top' title='click to go to top of document'
-      name="SPUNGE_TMUX_CMD_NEWW_EXEC" id=
-      "SPUNGE_TMUX_CMD_NEWW_EXEC"><code>SPUNGE_TMUX_CMD_NEWW_EXEC</code></a>
+      name="DFTMUX_CMD_NEWW_EXEC" id=
+      "DFTMUX_CMD_NEWW_EXEC"><code>DFTMUX_CMD_NEWW_EXEC</code></a>
     </h3>
     <p>
       The <a href="http://search.cpan.org/perldoc?perlfunc#system" class=
       "podlinkpod">system()</a> or a shell command to be given to the
-      <code>SPUNGE_TMUX_CMD_NEWW</code> command to be executed in a brand
-      new created window. It should wait unexpectedly and do nothing till
-      the debugger catches the device and puts in into the proper use.
+      <code>DFTMUX_CMD_NEWW</code> command to be executed in a brand new
+      created window. It should wait unexpectedly and do nothing till the
+      debugger catches the device and puts in into the proper use.
     </p>
     <p>
       Default : <code>sleep 1000000</code>
     </p>
     <h3>
       <a class='u' href='#___top' title='click to go to top of document'
-      name="SPUNGE_TMUX_CMD_TTY" id=
-      "SPUNGE_TMUX_CMD_TTY"><code>SPUNGE_TMUX_CMD_TTY</code></a>
+      name="DFTMUX_CMD_TTY" id=
+      "DFTMUX_CMD_TTY"><code>DFTMUX_CMD_TTY</code></a>
     </h3>
     <p>
       Command- line parameter(s) for a <code>tmux</code> command to find a
@@ -389,6 +412,17 @@
     </p>
     <p>
       Default : <code>lsp -F #{pane_tty} -t</code>
+    </p>
+    <h3>
+      <a class='u' href='#___top' title='click to go to top of document'
+      name="Earlier_versions'_SPUNGE_*_environment_variables">Earlier
+      versions' <code>SPUNGE_*</code> environment variables</a>
+    </h3>
+    <p>
+      Till v1.000009 the module was controlled by the environment variables
+      like <code>SPUNGE_TMUX_FQDN</code>. Those are deprecated and should
+      be replaced in your configuration(s) onto the
+      <code>DFTMUX_</code>-prefixed ones.
     </p>
     <h2>
       <a class='u' href='#___top' title='click to go to top of document'
@@ -481,7 +515,7 @@
       name="DEPENDENCIES" id="DEPENDENCIES">DEPENDENCIES</a>
     </h2>
     <p>
-      * <code>Perl 5.6.0+</code> is available from <a href=
+      * <code>Perl 5.8.9+</code> is available from <a href=
       "http://www.perl.org" class="podlinkurl">The Perl website</a>
     </p>
     <p>
@@ -494,8 +528,14 @@
       "http://search.cpan.org/perldoc?File%3A%3AFind" class=
       "podlinkpod">File::Find</a>, <a href=
       "http://search.cpan.org/perldoc?File%3A%3ASpec" class=
-      "podlinkpod">File::Spec</a> are available in core <code>Perl</code>
-      distribution version 5.6.0 and later
+      "podlinkpod">File::Spec</a>, <a href=
+      "http://search.cpan.org/perldoc?File%3A%3ABasename" class=
+      "podlinkpod">File::Basename</a>, <a href=
+      "http://search.cpan.org/perldoc?Scalar%3A%3AUtil" class=
+      "podlinkpod">Scalar::Util</a>, <a href=
+      "http://search.cpan.org/perldoc?Test%3A%3AMore" class=
+      "podlinkpod">Test::More</a> are available in core <code>Perl</code>
+      distribution version 5.8.9 and later
     </p>
     <p>
       * <a href="http://search.cpan.org/perldoc?Const%3A%3AFast" class=
@@ -507,22 +547,12 @@
       distribution since version 5.9.4
     </p>
     <p>
-      * <a href="http://search.cpan.org/perldoc?Scalar%3A%3AUtil" class=
-      "podlinkpod">Scalar::Util</a> is available in core <code>Perl</code>
-      distribution since version 5.7.3
-    </p>
-    <p>
       * <a href="http://search.cpan.org/perldoc?Sort%3A%3AVersions" class=
       "podlinkpod">Sort::Versions</a> is available from <code>CPAN</code>
     </p>
     <p>
       * <a href="http://search.cpan.org/perldoc?Test%3A%3AException" class=
       "podlinkpod">Test::Exception</a> is available from <code>CPAN</code>
-    </p>
-    <p>
-      * <a href="http://search.cpan.org/perldoc?Test%3A%3AMore" class=
-      "podlinkpod">Test::More</a> is available in core <code>Perl</code>
-      distribution since version 5.6.2
     </p>
     <p>
       * <a href="http://search.cpan.org/perldoc?Test%3A%3AMost" class=

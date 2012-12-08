@@ -38,12 +38,13 @@ my %WriteMakefileArgs = (
     "Config" => 0,
     "Const::Fast" => 0,
     "Cwd" => 0,
+    "Env::Path" => 0,
     "File::Basename" => 0,
     "File::Spec" => 0,
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "1.000010",
+  "VERSION" => "1.000011",
   "test" => {
     "TESTS" => "t/*.t"
   }

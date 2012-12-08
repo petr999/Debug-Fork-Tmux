@@ -3,7 +3,7 @@ NAME
 
 VERSION
     This documentation refers to the module contained in the distribution
-    "Debug-Fork-Tmux" version 1.000010.
+    "Debug-Fork-Tmux" version 1.000011.
 
 SYNOPSIS
         #!/usr/bin/perl -d
@@ -197,6 +197,8 @@ DEPENDENCIES
     * Test::Most is available from "CPAN"
 
     * Test::Strict is available from "CPAN"
+
+    * Env::Path is available from "CPAN"
 
     * autodie is available in core "Perl" distribution since version 5.10.1
 

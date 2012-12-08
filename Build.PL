@@ -30,7 +30,7 @@ my %module_build_args = (
     "L<Peter Vereshagin|http://vereshagin.org> <peter\@vereshagin.org>"
   ],
   "dist_name" => "Debug-Fork-Tmux",
-  "dist_version" => "1.000010",
+  "dist_version" => "1.000011",
   "license" => "bsd",
   "module_name" => "Debug::Fork::Tmux",
   "recommends" => {},
@@ -40,6 +40,7 @@ my %module_build_args = (
     "Config" => 0,
     "Const::Fast" => 0,
     "Cwd" => 0,
+    "Env::Path" => 0,
     "File::Basename" => 0,
     "File::Spec" => 0,
     "perl" => "5.006",

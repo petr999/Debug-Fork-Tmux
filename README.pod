@@ -6,7 +6,7 @@ Debug::Fork::Tmux - Makes fork() in debugger to open a new Tmux window
 
 =head1 VERSION
 
-This documentation refers to the module contained in the distribution C<Debug-Fork-Tmux> version 1.000010.
+This documentation refers to the module contained in the distribution C<Debug-Fork-Tmux> version 1.000011.
 
 =head1 SYNOPSIS
 
@@ -239,6 +239,9 @@ is available from C<CPAN>
 is available from C<CPAN>
 
 * L<Test::Strict>
+is available from C<CPAN>
+
+* L<Env::Path>
 is available from C<CPAN>
 
 * L<autodie>

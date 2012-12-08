@@ -31,6 +31,7 @@ requires:
   Config: 0
   Const::Fast: 0
   Cwd: 0
+  Env::Path: 0
   File::Basename: 0
   File::Spec: 0
   perl: 5.006
@@ -39,4 +40,4 @@ requires:
 resources:
   bugtracker: http://bugs.vereshagin.org/product/Debug-Fork-Tmux
   repository: https://github.com/petr999/Debug-Fork-Tmux.git
-version: 1.000010
+version: 1.000011

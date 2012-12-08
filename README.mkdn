@@ -4,7 +4,7 @@ Debug::Fork::Tmux - Makes fork() in debugger to open a new Tmux window
 
 # VERSION
 
-This documentation refers to the module contained in the distribution `Debug-Fork-Tmux` version 1.000010.
+This documentation refers to the module contained in the distribution `Debug-Fork-Tmux` version 1.000011.
 
 # SYNOPSIS
 
@@ -225,6 +225,9 @@ is available from `CPAN`
 is available from `CPAN`
 
 \* [Test::Strict](http://search.cpan.org/perldoc?Test::Strict)
+is available from `CPAN`
+
+\* [Env::Path](http://search.cpan.org/perldoc?Env::Path)
 is available from `CPAN`
 
 \* [autodie](http://search.cpan.org/perldoc?autodie)

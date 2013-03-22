@@ -1,3 +1,5 @@
+use lib 'inc';
+use Devel::AssertOS qw[Unix];
 
 use strict;
 use warnings;
@@ -15,7 +17,6 @@ my %WriteMakefileArgs = (
     "File::Find" => 0,
     "File::Temp" => 0,
     "Module::Build" => "0.3601",
-    "Perl6::Slurp" => 0,
     "Scalar::Util" => 0,
     "Sort::Versions" => 0,
     "Sub::Name" => 0,
@@ -23,7 +24,7 @@ my %WriteMakefileArgs = (
     "Test::More" => "0.94",
     "Test::Most" => 0,
     "Test::Strict" => 0,
-    "Test::Version" => 0,
+    "Test::Version" => "1.002",
     "autodie" => 0
   },
   "CONFIGURE_REQUIRES" => {
@@ -44,7 +45,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "1.000011",
+  "VERSION" => "1.000012",
   "test" => {
     "TESTS" => "t/*.t"
   }

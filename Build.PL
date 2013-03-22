@@ -1,3 +1,5 @@
+use lib 'inc';
+use Devel::AssertOS qw[Unix];
 
 use strict;
 use warnings;
@@ -10,7 +12,6 @@ my %module_build_args = (
     "File::Find" => 0,
     "File::Temp" => 0,
     "Module::Build" => "0.3601",
-    "Perl6::Slurp" => 0,
     "Scalar::Util" => 0,
     "Sort::Versions" => 0,
     "Sub::Name" => 0,
@@ -18,7 +19,7 @@ my %module_build_args = (
     "Test::More" => "0.94",
     "Test::Most" => 0,
     "Test::Strict" => 0,
-    "Test::Version" => 0,
+    "Test::Version" => "1.002",
     "autodie" => 0,
     "perl" => "5.004"
   },
@@ -30,7 +31,7 @@ my %module_build_args = (
     "L<Peter Vereshagin|http://vereshagin.org> <peter\@vereshagin.org>"
   ],
   "dist_name" => "Debug-Fork-Tmux",
-  "dist_version" => "1.000011",
+  "dist_version" => "1.000012",
   "license" => "bsd",
   "module_name" => "Debug::Fork::Tmux",
   "recommends" => {},

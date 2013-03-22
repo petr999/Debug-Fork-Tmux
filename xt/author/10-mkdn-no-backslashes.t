@@ -28,7 +28,8 @@ use Carp;
 use Test::Exception;
 
 # Reads file into a scalar variable
-use Perl6::Slurp;
+eval "use Perl6::Slurp";    ## no critic
+plan skip_all => "Perl6::Slurp required for testing" if $@;
 
 ### CONSTANTS ###
 #

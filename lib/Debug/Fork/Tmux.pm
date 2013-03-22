@@ -191,6 +191,8 @@ __END__
     #
     # ABSTRACT: Debug the fork()-contained code in this file
     #
+    ## Works only under Tmux: http://tmux.sf.net
+    #
     # Make fork()s debuggable with Tmux
     use Debug::Fork::Tmux;
 
@@ -199,7 +201,21 @@ __END__
 
 =head1 DESCRIPTION
 
-The real usage example of this module is:
+Make sure you have the running C<Tmux> window manager:
+
+    $ tmux
+
+=over
+
+=item * Only C<Tmux> version 1.6 and higher works with C<Debug::Fork::Tmux>.
+See L</DEPENDENCIES>.
+
+=item * It is not necessary to run this under C<Tmux>, see L</Attaching to
+the other C<Tmux> session>.
+
+=back
+
+Then the real usage example of this module is:
 
     $ perl -MDebug::Fork::Tmux -d your_script.pl
 
@@ -291,38 +307,38 @@ L<system()|perlfunc/system> command failure.
 
 =over
 
-=item The command ...
+=item * C<The command ...>
 
 Typically the error message starts with the command the L<Debug::Fork::Tmux> tried
 to execute, including the command's arguments.
 
-=item failed opening command: ...
+=item * C<failed opening command: ...>
 
 The command was not taken by the system as an executable binary file.
 
-=item ... didn't write a line
+=item * C<... didn't write a line>
 
-=item failed reading command: ...
+=item * C<failed reading command: ...>
 
 Command did not output exactly one line of the text.
 
-=item ... did not finish
+=item * C<... did not finish>
 
 Command outputs more than one line of the text.
 
-=item provided empty string
+=item * C<provided empty string>
 
 Command outputs exactly one line of the text and the line is empty.
 
-=item failed to execute: ...
+=item * C<failed to execute: ...>
 
 There was failure executing the command
 
-=item child died with(out) signal X, Y coredump
+=item * C<child died with(out) signal X, Y coredump>
 
 Command was killed by the signal X and the coredump is (not) located in Y.
 
-=item child exited with value X
+=item * C<child exited with value X>
 
 Command was not failed but there are reasons to throw an error like the
 wrong command's output.
@@ -357,6 +373,9 @@ is available from C<CPAN>
 * L<Test::Strict>
 is available from C<CPAN>
 
+* L<Env::Path>
+is available from C<CPAN>
+
 * L<autodie>
 is available in core C<Perl> distribution since version 5.10.1
 
@@ -370,6 +389,14 @@ distribution/repository.
 
 The module requires the L<Tmux|http://tmux.sf.net> window manager for the
 console to be present in the system.
+
+This means that it requires the C<Unix>-like operating system not only to
+have a L<fork> implemented and a C<TTY> device name supplement but the
+system should have Tmux up and running.
+
+Therefore C<Cygwin> for example isn't in at this moment, see the
+L<explanation|http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1354>
+why.
 
 Configuration is made via environment variables, the default is taken for
 each of them with no such variable is set in the environment:
@@ -423,6 +450,18 @@ Default :  C<lsp -F #{pane_tty} -t>
 Till v1.000009 the module was controlled by the environment variables like
 C<SPUNGE_TMUX_FQDN>. Those are deprecated and should be replaced in your
 configuration(s) onto the C<DFTMUX_>-prefixed ones.
+
+=head2 Attaching to the other C<Tmux> session
+
+For the case you can not or don't want to use the current C<tmux> session
+you are running in, you may want to have the separate C<tmux> server up and
+running and use its windows or panes to be created. This can be done by mean
+of prepending the correct C<-L> or C<-S> switch to the start of the every of
+the command-line parameters string to be used, for example:
+
+    $ DFTMUX_CMD_NEWW="-L default neww -P" \
+    > DFTMUX_CMD_TTY="-L default lsp -F #{pane_tty} -t" \
+    > perl -MDebug::Fork::Tmux -d your_script.pl
 
 =head1 WEB SITE
 

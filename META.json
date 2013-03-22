@@ -13,6 +13,11 @@
       "version" : "2"
    },
    "name" : "Debug-Fork-Tmux",
+   "no_index" : {
+      "directory" : [
+         "inc"
+      ]
+   },
    "prereqs" : {
       "build" : {
          "requires" : {
@@ -50,7 +55,6 @@
          "requires" : {
             "File::Find" : "0",
             "File::Temp" : "0",
-            "Perl6::Slurp" : "0",
             "Scalar::Util" : "0",
             "Sort::Versions" : "0",
             "Sub::Name" : "0",
@@ -58,7 +62,7 @@
             "Test::More" : "0.94",
             "Test::Most" : "0",
             "Test::Strict" : "0",
-            "Test::Version" : "0",
+            "Test::Version" : "1.002",
             "autodie" : "0",
             "perl" : "5.004"
          }
@@ -76,6 +80,6 @@
          "web" : "http://gitweb.vereshagin.org/Debug-Fork-Tmux"
       }
    },
-   "version" : "1.000011"
+   "version" : "1.000012"
 }
 

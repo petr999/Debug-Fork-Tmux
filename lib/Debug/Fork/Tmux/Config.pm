@@ -27,50 +27,18 @@ require Config;
 # Rips directory name from fully-qualified file name (fqfn)
 use File::Basename;
 
+# Reads PATH environment variable into the array
+use Env::Path;
+
 ### CONSTANTS ###
 #
 # Paths to search the 'tmux' binary
-# Depends   :   On %::ENV main global
-# Requires  :   Cwd, File::Basename
-my @_DEFAULT_TMUX_PATHS => map { Cwd::realpath($_) }
-    File::Basename::dirname( $Config::Config{'perlpath'} ),
-    '.';
-if ( defined $ENV{'PATH'} ) {
-    my @paths = map { Cwd::realpath($_) } split /:/, $ENV{'PATH'};
-    unshift @_DEFAULT_TMUX_PATHS, @paths;
-}
-
-# Unique and constant
-{
-    my %seen = ();
-    @_DEFAULT_TMUX_PATHS = grep { !$seen{$_}++ } @_DEFAULT_TMUX_PATHS;
-}
-const @_DEFAULT_TMUX_PATHS => @_DEFAULT_TMUX_PATHS;
+# Depends   :   On 'PATH' environment variable
+const my @_DEFAULT_TMUX_PATHS => _default_tmux_path( Env::Path->PATH->List );
 
 # Default 'tmux' binary fqfn
-# Depends   :   On @_DEFAULT_TMUX_PATHS
-# Requires  :   File::Spec
-my $_DEFAULT_TMUX_FQFN;
-foreach my $path (@_DEFAULT_TMUX_PATHS) {
-    my $fname;
-
-    # Binary without prefix
-    foreach my $suffix ( '' => '.exe' ) {
-        $fname = File::Spec->catfile( @_DEFAULT_TMUX_PATHS, "tmux$suffix" );
-        if ( -x $fname ) {
-            $_DEFAULT_TMUX_FQFN = $fname;
-            last;    # foreach my $suffix
-        }
-    }
-
-    last if defined $_DEFAULT_TMUX_FQFN;    # foreach my $path
-}
-
-# Fall back if no binary found in the default paths
-$_DEFAULT_TMUX_FQFN = 'tmux' unless defined $_DEFAULT_TMUX_FQFN;
-
-# Make unchangeable
-const $_DEFAULT_TMUX_FQFN => $_DEFAULT_TMUX_FQFN;
+const my $_DEFAULT_TMUX_FQFN =>
+    _default_tmux_fqfn( \@_DEFAULT_TMUX_PATHS => [ '' => '.exe' ], );
 
 # Keep the configuration variables
 my %_CONF;
@@ -89,30 +57,19 @@ $_CONF{'tmux_cmd_neww'} = "neww -P";
 # Tmux command parameters to get a tty name
 $_CONF{'tmux_cmd_tty'} = 'lsp -F #{pane_tty} -t';
 
+# Takes deprecated SPUNGE_* environment variables into the account, too
+_env_to_conf(
+    \%_CONF => "SPUNGE_",
+    sub {
+        warn sprintf( "%s is deprecated and will be unsupported" => shift );
+    }
+);
+
 # Take config override from %ENV
 # Depends   :   On %ENV global of the main::
-foreach my $key ( keys %_CONF ) {
+_env_to_conf( \%_CONF => "DF" );
 
-    # Key for %ENV
-    my $env_key = "DF" . uc $key;
-
-    next unless defined $ENV{$env_key};
-
-    $_CONF{$key} = $ENV{$env_key};
-}
-
-# Takes deprecated SPUNGE_* environment variables into the account, too
-foreach my $key ( keys %_CONF ) {
-
-    # Key for %ENV
-    my $env_key = "SPUNGE_" . uc $key;
-
-    next unless defined $ENV{$env_key};
-
-    warn "$env_key is deprecated and will be unsupported";
-    $_CONF{$key} = $ENV{$env_key};
-}
-
+# Make configuration unchangeable
 const %_CONF => %_CONF;
 
 ### ATTRIBUTES ###
@@ -120,6 +77,95 @@ const %_CONF => %_CONF;
 
 ### SUBS ###
 #
+# Function
+# Reads environment to config
+# Takes     :   HashRef[Str] configuration to read;
+#               Str environment variables' prefix to read config from;
+#               Optional CodeRef to evaluate with environment variable name
+#               as an argument.
+# Depends   :   On configuration HashRef's keys and the corresponding
+#               environment variables
+# Changes   :   Configuration HashRef supplied as an argument
+# Outputs   :   From CodeRef if supplied to warn to STDOUT about SPUNGE_*
+#               deprecation
+# Returns   :   n/a
+sub _env_to_conf {
+    my $conf   = shift;
+    my $prefix = shift;
+    my $cref   = shift || undef;
+
+    foreach my $key ( keys %$conf ) {
+
+        # Key for %ENV
+        my $env_key = $prefix . uc $key;
+
+        # For no key in environment do nothing
+        next unless defined $ENV{$env_key};
+
+        # Sub warns about deprecation
+        if ( defined $cref ) { $cref->($env_key); }
+
+        # Real config change
+        $conf->{$key} = $ENV{$env_key};
+    }
+}
+
+# Function
+# Finds default 'tmux' binary fully qualified fila name
+# Takes     :   ArrayRef[Str] paths to search for 'tmux' binary
+#               ArrayRef[Str] suffixes of the binaries to search
+# Depends   :   On 'tmux' binaries found in the system
+# Requires  :   File::Spec module
+# Returns   :   Str fully qualified file name of the 'tmux' binary, or just
+#               'tmux' if no such binary was found
+sub _default_tmux_fqfn {
+    my ( $paths => $suffixes ) = @_;
+    my $fqfn;
+
+    foreach my $path (@$paths) {
+        my $fname;
+
+        # Binary without prefix
+        foreach my $suffix (@$suffixes) {
+            $fname = File::Spec->catfile( $path, "tmux$suffix" );
+            if ( -x $fname ) {
+                $fqfn = $fname;
+                last;    # foreach my $suffix
+            }
+        }
+
+        # Fall back if no binary found in the default paths
+        $fqfn = 'tmux' unless defined $fqfn;
+
+        last if defined $fqfn;    # foreach my @$paths
+    }
+
+    return $fqfn;
+}
+
+# Function
+# Paths to search the 'tmux' binary in
+# Takes     :   Array[Str] contents of the PATH environment variable
+# Depends   :   On the current directory and Perl interpreter path
+# Requires  :   Cwd, File::Basename, Config modules
+# Returns   :   Array[Str] ordered unique path to search for 'tmux' binary
+#               except that was configured with environment variable
+sub _default_tmux_path {
+    my @paths = @_;
+
+    # Additional paths to search for Tmux
+    my @paths_add
+        = map { Cwd::realpath($_) }
+        File::Basename::dirname( $Config::Config{'perlpath'} ),
+        '.';
+    push @paths, @paths_add;
+
+    # Filter out dupes
+    my %seen = ();
+    @paths = grep { !$seen{$_}++ } @paths;
+
+    return @paths;
+}
 
 # Static method
 # Returns Str argument configured as a key supplied as an argument

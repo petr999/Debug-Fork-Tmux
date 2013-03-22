@@ -10,9 +10,6 @@ use warnings;
 # Makes this test a test
 use Test::Strict;
 
-# Can walk through directory finding the files
-use File::Find;
-
 ### CONSTANTS ###
 #
 # Makes constants possible
@@ -36,7 +33,7 @@ const my @CHECK_SYNTAX_ONLY => grep { -d $_ } qw/xt/;
 
 # Check syntax of other perl files
 # Depends   :   On @CHECK_SYNTAX_ONLY lexical
-{
+if (@CHECK_SYNTAX_ONLY) {
     local $Test::Strict::TEST_STRICT = '';
     all_perl_files_ok(@CHECK_SYNTAX_ONLY);
 }

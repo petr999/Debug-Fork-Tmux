@@ -99,6 +99,10 @@
               '#Earlier_versions%27_SPUNGE_*_environment_variables'>Earlier
               versions' SPUNGE_* environment variables</a>
             </li>
+            <li class='indexItem indexItem2'>
+              <a href='#Attaching_to_the_other_Tmux_session'>Attaching to
+              the other Tmux session</a>
+            </li>
           </ul>
         </li>
         <li class='indexItem indexItem1'>
@@ -154,7 +158,7 @@
     </h2>
     <p>
       This documentation refers to the module contained in the distribution
-      <code>Debug-Fork-Tmux</code> version 1.000011.
+      <code>Debug-Fork-Tmux</code> version 1.000012.
     </p>
     <h2>
       <a class='u' href='#___top' title='click to go to top of document'
@@ -164,6 +168,8 @@
     #!/usr/bin/perl -d
     #
     # ABSTRACT: Debug the fork()-contained code in this file
+    #
+    ## Works only under Tmux: http://tmux.sf.net
     #
     # Make fork()s debuggable with Tmux
     use Debug::Fork::Tmux;
@@ -176,7 +182,23 @@
       name="DESCRIPTION" id="DESCRIPTION">DESCRIPTION</a>
     </h2>
     <p>
-      The real usage example of this module is:
+      Make sure you have the running <code>Tmux</code> window manager:
+    </p>
+    <pre>
+    $ tmux
+</pre>
+    <ul>
+      <li>Only <code>Tmux</code> version 1.6 and higher works with
+      <code>Debug::Fork::Tmux</code>. See <a href="#DEPENDENCIES" class=
+      "podlinkpod">"DEPENDENCIES"</a>.
+      </li>
+      <li>It is not necessary to run this under <code>Tmux</code>, see
+      <a href="#Attaching_to_the_other_Tmux_session" class=
+      "podlinkpod">"Attaching to the other <code>Tmux</code> session"</a>.
+      </li>
+    </ul>
+    <p>
+      Then the real usage example of this module is:
     </p>
     <pre>
     $ perl -MDebug::Fork::Tmux -d your_script.pl
@@ -336,6 +358,19 @@
       the system.
     </p>
     <p>
+      This means that it requires the <code>Unix</code>-like operating
+      system not only to have a <a href=
+      "http://search.cpan.org/perldoc?fork" class="podlinkpod">fork</a>
+      implemented and a <code>TTY</code> device name supplement but the
+      system should have Tmux up and running.
+    </p>
+    <p>
+      Therefore <code>Cygwin</code> for example isn't in at this moment,
+      see the <a href=
+      "http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1354"
+      class="podlinkurl">explanation</a> why.
+    </p>
+    <p>
       Configuration is made via environment variables, the default is taken
       for each of them with no such variable is set in the environment:
     </p>
@@ -424,92 +459,90 @@
       be replaced in your configuration(s) onto the
       <code>DFTMUX_</code>-prefixed ones.
     </p>
+    <h3>
+      <a class='u' href='#___top' title='click to go to top of document'
+      name="Attaching_to_the_other_Tmux_session" id=
+      "Attaching_to_the_other_Tmux_session">Attaching to the other
+      <code>Tmux</code> session</a>
+    </h3>
+    <p>
+      For the case you can not or don't want to use the current
+      <code>tmux</code> session you are running in, you may want to have
+      the separate <code>tmux</code> server up and running and use its
+      windows or panes to be created. This can be done by mean of
+      prepending the correct <code>-L</code> or <code>-S</code> switch to
+      the start of the every of the command-line parameters string to be
+      used, for example:
+    </p>
+    <pre>
+    $ DFTMUX_CMD_NEWW="-L default neww -P" \
+    &gt; DFTMUX_CMD_TTY="-L default lsp -F #{pane_tty} -t" \
+    &gt; perl -MDebug::Fork::Tmux -d your_script.pl
+</pre>
     <h2>
       <a class='u' href='#___top' title='click to go to top of document'
       name="DIAGNOSTICS" id="DIAGNOSTICS">DIAGNOSTICS</a>
     </h2>
-    <dl>
-      <dt>
-        <a name="The_command_..." id="The_command_...">The command ...</a>
-      </dt>
-      <dd>
+    <ul>
+      <li>
+        <code>The command ...</code>
         <p>
           Typically the error message starts with the command the <a href=
           "http://search.cpan.org/perldoc?Debug%3A%3AFork%3A%3ATmux" class=
           "podlinkpod">Debug::Fork::Tmux</a> tried to execute, including
           the command's arguments.
         </p>
-      </dd>
-      <dt>
-        <a name="failed_opening_command:_..." id=
-        "failed_opening_command:_...">failed opening command: ...</a>
-      </dt>
-      <dd>
+      </li>
+      <li>
+        <code>failed opening command: ...</code>
         <p>
           The command was not taken by the system as an executable binary
           file.
         </p>
-      </dd>
-      <dt>
-        <a name="..._didn't_write_a_line">... didn't write a line</a>
-      </dt>
-      <dt>
-        <a name="failed_reading_command:_..." id=
-        "failed_reading_command:_...">failed reading command: ...</a>
-      </dt>
-      <dd>
+      </li>
+      <li>
+        <code>... didn't write a line</code>
+      </li>
+      <li>
+        <code>failed reading command: ...</code>
         <p>
           Command did not output exactly one line of the text.
         </p>
-      </dd>
-      <dt>
-        <a name="..._did_not_finish">... did not finish</a>
-      </dt>
-      <dd>
+      </li>
+      <li>
+        <code>... did not finish</code>
         <p>
           Command outputs more than one line of the text.
         </p>
-      </dd>
-      <dt>
-        <a name="provided_empty_string" id="provided_empty_string">provided
-        empty string</a>
-      </dt>
-      <dd>
+      </li>
+      <li>
+        <code>provided empty string</code>
         <p>
           Command outputs exactly one line of the text and the line is
           empty.
         </p>
-      </dd>
-      <dt>
-        <a name="failed_to_execute:_..." id="failed_to_execute:_...">failed
-        to execute: ...</a>
-      </dt>
-      <dd>
+      </li>
+      <li>
+        <code>failed to execute: ...</code>
         <p>
           There was failure executing the command
         </p>
-      </dd>
-      <dt>
-        <a name="child_died_with(out)_signal_X,_Y_coredump">child died
-        with(out) signal X, Y coredump</a>
-      </dt>
-      <dd>
+      </li>
+      <li>
+        <code>child died with(out) signal X, Y coredump</code>
         <p>
           Command was killed by the signal X and the coredump is (not)
           located in Y.
         </p>
-      </dd>
-      <dt>
-        <a name="child_exited_with_value_X" id=
-        "child_exited_with_value_X">child exited with value X</a>
-      </dt>
-      <dd>
+      </li>
+      <li>
+        <code>child exited with value X</code>
         <p>
           Command was not failed but there are reasons to throw an error
           like the wrong command's output.
         </p>
-      </dd>
-    </dl>
+      </li>
+    </ul>
     <h2>
       <a class='u' href='#___top' title='click to go to top of document'
       name="DEPENDENCIES" id="DEPENDENCIES">DEPENDENCIES</a>
@@ -787,7 +820,7 @@
       LICENSE</a>
     </h2>
     <p>
-      This software is Copyright (c) 2012 by Peter Vereshagin.
+      This software is Copyright (c) 2013 by Peter Vereshagin.
     </p>
     <p>
       This is free software, licensed under:
@@ -812,6 +845,14 @@
       <li>
         <a href="http://perlmonks.org/?node_id=128283" class=
         "podlinkurl">http://perlmonks.org/?node_id=128283</a>
+      </li>
+      <li>
+        <a href="nntp://nntp.perl.org/perl.debugger" class=
+        "podlinkurl">nntp://nntp.perl.org/perl.debugger</a>
+      </li>
+      <li>
+        <a href="http://debugger.perl.org/" class=
+        "podlinkurl">http://debugger.perl.org/</a>
       </li>
     </ul>
     <h2>

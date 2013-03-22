@@ -3,12 +3,14 @@ NAME
 
 VERSION
     This documentation refers to the module contained in the distribution
-    "Debug-Fork-Tmux" version 1.000011.
+    "Debug-Fork-Tmux" version 1.000012.
 
 SYNOPSIS
         #!/usr/bin/perl -d
         #
         # ABSTRACT: Debug the fork()-contained code in this file
+        #
+        ## Works only under Tmux: http://tmux.sf.net
         #
         # Make fork()s debuggable with Tmux
         use Debug::Fork::Tmux;
@@ -17,7 +19,17 @@ SYNOPSIS
         fork;
 
 DESCRIPTION
-    The real usage example of this module is:
+    Make sure you have the running "Tmux" window manager:
+
+        $ tmux
+
+    *   Only "Tmux" version 1.6 and higher works with "Debug::Fork::Tmux".
+        See "DEPENDENCIES".
+
+    *   It is not necessary to run this under "Tmux", see "Attaching to the
+        other "Tmux" session".
+
+    Then the real usage example of this module is:
 
         $ perl -MDebug::Fork::Tmux -d your_script.pl
 
@@ -105,6 +117,15 @@ CONFIGURATION AND ENVIRONMENT
     The module requires the Tmux <http://tmux.sf.net> window manager for the
     console to be present in the system.
 
+    This means that it requires the "Unix"-like operating system not only to
+    have a fork implemented and a "TTY" device name supplement but the
+    system should have Tmux up and running.
+
+    Therefore "Cygwin" for example isn't in at this moment, see the
+    explanation
+    <http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1354
+    > why.
+
     Configuration is made via environment variables, the default is taken
     for each of them with no such variable is set in the environment:
 
@@ -147,34 +168,54 @@ CONFIGURATION AND ENVIRONMENT
     like "SPUNGE_TMUX_FQDN". Those are deprecated and should be replaced in
     your configuration(s) onto the "DFTMUX_"-prefixed ones.
 
+  Attaching to the other "Tmux" session
+    For the case you can not or don't want to use the current "tmux" session
+    you are running in, you may want to have the separate "tmux" server up
+    and running and use its windows or panes to be created. This can be done
+    by mean of prepending the correct "-L" or "-S" switch to the start of
+    the every of the command-line parameters string to be used, for example:
+
+        $ DFTMUX_CMD_NEWW="-L default neww -P" \
+        > DFTMUX_CMD_TTY="-L default lsp -F #{pane_tty} -t" \
+        > perl -MDebug::Fork::Tmux -d your_script.pl
+
 DIAGNOSTICS
-    The command ...
+    *   "The command ..."
+
         Typically the error message starts with the command the
         Debug::Fork::Tmux tried to execute, including the command's
         arguments.
 
-    failed opening command: ...
+    *   "failed opening command: ..."
+
         The command was not taken by the system as an executable binary
         file.
 
-    ... didn't write a line
-    failed reading command: ...
+    *   "... didn't write a line"
+
+    *   "failed reading command: ..."
+
         Command did not output exactly one line of the text.
 
-    ... did not finish
+    *   "... did not finish"
+
         Command outputs more than one line of the text.
 
-    provided empty string
+    *   "provided empty string"
+
         Command outputs exactly one line of the text and the line is empty.
 
-    failed to execute: ...
+    *   "failed to execute: ..."
+
         There was failure executing the command
 
-    child died with(out) signal X, Y coredump
+    *   "child died with(out) signal X, Y coredump"
+
         Command was killed by the signal X and the coredump is (not) located
         in Y.
 
-    child exited with value X
+    *   "child exited with value X"
+
         Command was not failed but there are reasons to throw an error like
         the wrong command's output.
 
@@ -323,7 +364,7 @@ AUTHOR
     Peter Vereshagin <http://vereshagin.org> <peter@vereshagin.org>
 
 COPYRIGHT AND LICENSE
-    This software is Copyright (c) 2012 by Peter Vereshagin.
+    This software is Copyright (c) 2013 by Peter Vereshagin.
 
     This is free software, licensed under:
 
@@ -336,6 +377,10 @@ SEE ALSO
     *   Debug::Fork::Tmux::Config
 
     *   <http://perlmonks.org/?node_id=128283>
+
+    *   <nntp://nntp.perl.org/perl.debugger>
+
+    *   <http://debugger.perl.org/>
 
 DISCLAIMER OF WARRANTY
     BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY

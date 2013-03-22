@@ -6,7 +6,6 @@ build_requires:
   File::Find: 0
   File::Temp: 0
   Module::Build: 0.3601
-  Perl6::Slurp: 0
   Scalar::Util: 0
   Sort::Versions: 0
   Sub::Name: 0
@@ -14,7 +13,7 @@ build_requires:
   Test::More: 0.94
   Test::Most: 0
   Test::Strict: 0
-  Test::Version: 0
+  Test::Version: 1.002
   autodie: 0
   perl: 5.004
 configure_requires:
@@ -26,6 +25,9 @@ meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Debug-Fork-Tmux
+no_index:
+  directory:
+    - inc
 requires:
   Carp: 0
   Config: 0
@@ -40,4 +42,4 @@ requires:
 resources:
   bugtracker: http://bugs.vereshagin.org/product/Debug-Fork-Tmux
   repository: https://github.com/petr999/Debug-Fork-Tmux.git
-version: 1.000011
+version: 1.000012

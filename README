@@ -5,7 +5,134 @@ VERSION
     This documentation refers to the module contained in the distribution
     "Debug-Fork-Tmux" version 1.000012.
 
-SYNOPSIS
+ERROR IN SYNOPSYS
+
+Why do we get the error in Debug-Fork-Tmux at line 178 in Tmux.pm below?
+I have tried with an index of 0 and index of 1, both fail in the same way.
+SUSE Linux 11 p2 and Mac OS X 10.8.5 fail in the same way.
+
+$ chmod +x example
+$ perl -Ilocal/lib/perl5 -MDebug::Fork::Tmux -d example
+
+Loading DB routines from perl5db.pl version 1.33
+Editor support available.
+
+Enter h or `h h' for help, or `man perldebug' for more help.
+
+main::(example:12):	my $pid = fork;
+  DB<1> l
+12==>	my $pid = fork;
+13:	if ( $pid < 0 ) {
+14:	    print "fork failed\n";
+15:	    confess "fork pid < 1: fork pid value: $pid pid = $$\n";
+16 	}
+17:	elsif ( $pid == 0 ) {
+18:	    print "Child started\n";
+19:	    $DB::single = 1;
+20:	    exit 0;
+21 	}
+  DB<1> l 1,40
+1 	#!/usr/bin/perl -d
+2 	#
+3 	# ABSTRACT: Debug the fork()-contained code in this file
+4 	#
+5 	## Works only under Tmux: http://tmux.sf.net
+6 	#
+7 	# Make fork()s debuggable with Tmux
+8:	use Debug::Fork::Tmux;
+9:	use Carp qw( confess ); # Specific stack trace when dying...
+10 	
+11 	# See what happens in your debugger then...
+12==>	my $pid = fork;
+13:	if ( $pid < 0 ) {
+14:	    print "fork failed\n";
+15:	    confess "fork pid < 1: fork pid value: $pid pid = $$\n";
+16 	}
+17:	elsif ( $pid == 0 ) {
+18:	    print "Child started\n";
+19:	    $DB::single = 1;
+20:	    exit 0;
+21 	}
+22 	else {
+23:	    print "Parent started\n";
+24:	    $DB::single = 1;
+25:	    exit 0;
+26 	}
+  DB<2> s
+main::(example:13):	if ( $pid < 0 ) {
+  DB<2> window not found: 0:6.0
+The command tmux lsp -F #{pane_tty} -t 0:6.0 didn't write a line child exited with value 0 at /System/Library/Perl/5.12/perl5db.pl line 6319.
+ at local/lib/perl5/Debug/Fork/Tmux.pm line 178.
+	Debug::Fork::Tmux::_croak_on_cmd("tmux", "lsp", "-F", "#{pane_tty}", "-t", "0:6.0", "didn't write a line") called at local/lib/perl5/Debug/Fork/Tmux.pm line 119
+	Debug::Fork::Tmux::_read_from_cmd("tmux", "lsp", "-F", "#{pane_tty}", "-t", "0:6.0") called at local/lib/perl5/Debug/Fork/Tmux.pm line 98
+	Debug::Fork::Tmux::_tmux_window_tty("0:6.0") called at local/lib/perl5/Debug/Fork/Tmux.pm line 58
+	Debug::Fork::Tmux::_spawn_tty() called at local/lib/perl5/Debug/Fork/Tmux.pm line 42
+	DB::get_fork_TTY called at /System/Library/Perl/5.12/perl5db.pl line 6319
+	DB::create_IN_OUT(1) called at /System/Library/Perl/5.12/perl5db.pl line 6411
+	DB::resetterm(1) called at /System/Library/Perl/5.12/perl5db.pl line 5412
+	DB::print_lineinfo("main::(example:13):\x{9}if ( \$pid < 0 ) {\x{a}") called at /System/Library/Perl/5.12/perl5db.pl line 2123
+	DB::DB called at example line 13
+Debugged program terminated.  Use q to quit or R to restart,
+  use o inhibit_exit to avoid stopping after program termination,
+  h q, h R or h o to get additional info.  
+[pid=37015->37020]  DB<2> l
+13==>	if ( $pid < 0 ) {
+14:	    print "fork failed\n";
+15:	    confess "fork pid < 1: fork pid value: $pid pid = $$\n";
+16 	}
+17:	elsif ( $pid == 0 ) {
+18:	    print "Child started\n";
+19:	    $DB::single = 1;
+20:	    exit 0;
+21 	}
+22 	else {
+  DB<2> s
+Use `q' to quit or `R' to restart.  `h q' for details.
+[pid=37015->37020]  DB<2> l
+23:	    print "Parent started\n";
+24:	    $DB::single = 1;
+25:	    exit 0;
+26 	}
+  DB<2> s
+Use `q' to quit or `R' to restart.  `h q' for details.
+[pid=37015->37020]  DB<2> l
+26 	}
+  DB<2> s
+Use `q' to quit or `R' to restart.  `h q' for details.
+[pid=37015->37020]  DB<2> l
+26 	}
+  DB<2> s
+Use `q' to quit or `R' to restart.  `h q' for details.
+[pid=37015->37020]  DB<2> l
+26 	}
+  DB<2> q
+
+main::(example:23):	    print "Parent started\n";
+  DB<2> l
+23==>	    print "Parent started\n";
+24:	    $DB::single = 1;
+25:	    exit 0;
+26 	}
+  DB<2> s
+Parent started
+main::(example:24):	    $DB::single = 1;
+  DB<2> s
+main::(example:25):	    exit 0;
+  DB<2> l
+25==>	    exit 0;
+26 	}
+  DB<2> s
+Debugged program terminated.  Use q to quit or R to restart,
+  use o inhibit_exit to avoid stopping after program termination,
+  h q, h R or h o to get additional info.  
+  DB<2> 
+Use `q' to quit or `R' to restart.  `h q' for details.
+  DB<2> q
+$ 
+
+
+SYNOPSIS - extended example
+
         #!/usr/bin/perl -d
         #
         # ABSTRACT: Debug the fork()-contained code in this file
@@ -14,9 +141,24 @@ SYNOPSIS
         #
         # Make fork()s debuggable with Tmux
         use Debug::Fork::Tmux;
-
+        use Carp qw( confess ); # Specific stack trace when dying...
+        
         # See what happens in your debugger then...
-        fork;
+        my $pid = fork;
+        if ( $pid < 0 ) {
+            print "fork failed\n";
+            confess "fork pid < 1: fork pid value: $pid pid = $$\n";
+        }
+        elsif ( $pid == 0 ) {
+            print "Child started\n";
+            $DB::single = 1;
+            exit 0;
+        }
+        else {
+            print "Parent started\n";
+            $DB::single = 1;
+            exit 0;
+        }
 
 DESCRIPTION
     Make sure you have the running "Tmux" window manager:
